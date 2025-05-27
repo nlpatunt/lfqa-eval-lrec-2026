@@ -1,0 +1,104 @@
+### Instruction:
+You must answer only "yes" or "no". Do not add any explanation or rationale behind it.
+Decide whether the user’s question qualifies as a Long-Form Question Answering (LFQA) question (suitable for a long-form explanatory answer) according to the definition and annotation flow below.
+Important:
+Strict response format: yes or no
+Use your own intuition instead of simple keyword-matching
+
+Definition:
+A long-form question answer requires a detailed, multi-sentence answer that involves explanation, reasoning, exploration, and conceptual development. These questions are usually complex or open-ended, often asking “why” or “how” about a process, reason, or concept. It needs a thorough, paragraph-length response. It cannot be answered sufficiently with a single fact, formula application, calculation, only code, or by generating creative content (poem, joke, story, music, song lyrics, audio, picture).
+
+Annotation flow:
+Step 1: Simple question check
+Is the question asking for a single fact, yes/no response, only code generation, direct calculation using formulas, or creative content (poem, joke, story, music, song lyrics, audio, picture)?
+If yes, then classify it as not LFQA and reply no
+If not, then move to step 2
+
+Step 2: Require multi-step answers with explanation, reasoning, and exploration check
+Does answering the question require a multi-sentence answer involving explanation, reasoning, exploration, or conceptual development?
+If yes, then classify it as an LFQA and reply yes
+If no, then it is not LFQA, and reply no
+
+### Examples:
+
+Question: How do you feel?
+Answer: no
+Rationale: It expects a short, personal response, not an explanation.
+
+Question: Why do we experience déjà vu?
+Answer: yes
+Rationale: It asks for a complex psychological explanation that requires multiple sentences.
+
+Question: Why do soda bottles have a concave (dented) bottom?
+Answer: yes
+Rationale: It requires explaining design, pressure dynamics, and structural reasons—needs a multi-sentence answer.
+
+Question: If a nuclear bomb were dropped on a warehouse full of other nuclear weapons, would it cause all of them to detonate?
+Answer: yes
+Rationale: It’s a complex hypothetical that requires a detailed explanation of nuclear physics and safety mechanisms.
+
+Question: When did the Apollo 11 moon landing occur?
+Answer: no
+Rationale: It can be answered with a specific date, no explanation needed.
+
+Question: Who wrote the novel "1984"?
+Answer: no
+Rationale: It requires only a name—George Orwell—no further detail needed.
+
+Question: How is pure mathematics researched?
+Answer: yes
+Rationale: It requires a detailed explanation of abstract methods, proof techniques, and theoretical exploration—not a short answer.
+
+Question: Who is the president of the USA?
+Answer: no
+Rationale: It can be answered with a single name, without explanation.
+
+Question: How a bill gets introduced to the U.S. Congress Just curious about this?
+Answer: yes
+Rationale: It asks for a step-by-step explanation of a legislative process, which requires multiple sentences to answer fully.
+
+Question: What is quantum entanglement?
+Answer: yes
+Rationale: It’s a complex scientific concept that requires a multi-sentence explanation, not a simple definition.
+
+Question: Why do humans have eyebrows?
+Answer: yes
+Rationale: It asks for a biological and evolutionary explanation, which requires more than a one-sentence answer.
+
+Question: Why do people say ‘break a leg’ to actors instead of just wishing them good luck?
+Answer: yes
+Rationale: It seeks the origin and cultural reasoning behind a phrase, requiring a multi-sentence explanation.
+
+Question: What caused the Great Depression?
+Answer: yes
+Rationale: It requires explaining multiple economic and historical factors, which cannot be covered in a short answer.
+
+Question: Who was Nikola Tesla and why is he famous?
+Answer: yes
+Rationale: It calls for a brief biography and explanation of his contributions, requiring a multi-sentence response.
+
+Question: What's the difference between viruses and bacteria?
+Answer: yes
+Rationale: It requires comparing structure, function, and behavior, which needs a detailed, multi-point explanation.
+
+Question: Where did the Industrial Revolution begin, and why did it start there?
+Answer: yes
+Rationale: It asks for both a location and an explanation of historical and economic factors, requiring a multi-sentence answer.
+
+Question: When did humans first domesticate dogs, and how did it happen?
+Answer: yes
+Rationale: It seeks both a timeline and an explanation of the domestication process, requiring a detailed, multi-sentence response.
+
+Question: Is it true that chameleons change color primarily to blend in with their surroundings?
+Answer: yes
+Rationale: It requires more than a yes/no—explaining the biological reasons for color change demands a multi-sentence explanation.
+
+Question: What percentage of the ocean has been explored, and why is that number so low?
+Answer: yes
+Rationale: It asks for a quantitative fact and an explanation of contributing factors, requiring a multi-sentence response.
+
+### Input:
+Question: {}
+
+### Output:
+Answer:
