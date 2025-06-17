@@ -1,0 +1,57 @@
+### Instruction:
+Decide whether the user’s question qualifies as a Long-Form Question Answering (LFQA) according to the definition.
+
+
+### Output Format:
+Strict response format: You must answer only "yes" or "no". Please do not add any explanation or rationale behind it.
+
+
+### Definition:
+A LFQA must express a single, well-defined information need that requires a detailed, multi-sentence answer involving exposition, explanation, reasoning, exploration, or description of the process. These questions are usually complex or open-ended, often asking “why” or “how” about a process, reason, or concept in an objective manner, which means answers should be grounded in facts, reasoning, or conceptual explanation.
+
+It must not:
+- Combine multiple distinct or loosely related sub-questions  
+- Request personal advice, express individual preferences, seek personal opinions, and recommendations (e.g., product, place, city, food, restaurant, flight, school, course)
+- Be answerable with a single fact, a yes/no response, only code generation, direct formula calculation, or creative content (e.g., poem, joke, story, music, song lyrics, image, or audio) 
+
+
+### Examples:
+
+Question: How do you feel?
+Answer: no
+Rationale: subjective or personal question
+
+Question: If a nuclear bomb were dropped on a warehouse full of other nuclear weapons, would it cause all of them to detonate?
+Answer: yes
+Rationale: Complex hypothetical question that requires a detailed explanation of nuclear physics and safety mechanisms.
+
+Question: Best documentary about evolution for someone who only learned about creationism in school? I grew up in a fundamentalist cult learning exclusively about creationism. Now that I’m free of that, I want to learn about evolution. Can someone recommend a good documentary that is suitable for someone with NO background knowledge of the subject, that’s not necessarily directed at kids? Thanks in advance! 
+Answer: no
+Rationale: Request for recommendations, not a question requiring a conceptual or explanatory long-form answer.
+
+Question: How is pure mathematics researched?
+Answer: yes
+Rationale: Requires a detailed explanation of abstract methods, proof techniques, and theoretical exploration—not a short answer.
+
+Question: I have 100$ come up with a specific plan that can help me generate or increase my revenue from 100$ to 1000$ in one month
+Answer: no
+Rationale: Seeking a personal advice or planning request, not a factual or conceptual question requiring an explanatory long-form answer.
+
+Question: What is quantum entanglement?
+Answer: yes
+Rationale: A complex scientific concept that requires a multi-sentence explanation, not a simple definition.
+
+Question: Which role does TNNT2 play in alzheimer disease?  
+Answer: yes
+Rationale: Explaining TNNT2's role in Alzheimer's requires multi-sentence reasoning
+
+Question: Is it true that chameleons change color primarily to blend in with their surroundings?
+Answer: yes
+Rationale: Requires more than a yes/no—explaining the biological reasons for color change demands a multi-sentence explanation.
+
+
+### Input:
+Question: {}
+
+### Output:
+Answer:

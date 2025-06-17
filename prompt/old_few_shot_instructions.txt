@@ -1,0 +1,44 @@
+### Instruction:
+You must answer only "yes" or "no". Do not add any explanation.
+Judge whether the following question qualifies as a long-form question (LFQA) according to the definition and annotation flow below.
+Important:
+Strict response format: yes or no
+Use your own intuition instead of simple keyword matching
+
+Definition:
+A long-form question answer requires a multi-sentence answer that involves explanation, reasoning, exploration, and conceptual development. It cannot be answered sufficiently with a single fact, formula application, calculation, only code, or by generating creative content (poem, joke, story, music, song lyrics, audio, picture).
+
+Annotation flow:
+Step 1: Simple question check
+Is the question asking for a single fact, yes/no response, only code generation, direct calculation using formulas, or creative content (poem, joke, story, music, song lyrics, audio, picture)?
+If yes, classify it as not LFQA and reply no
+If not, move to step 2
+
+Step 2: Require multi-step answers with explanation, reasoning, exploration check
+Does answering the question require a multi-sentence answer involving explanation, reasoning, exploration or conceptual development?
+If yes, it is LFQA and reply yes
+If not, it is not LFQA and reply no
+
+### Examples:
+
+Question: How do you feel?
+Answer: no
+
+Question: How is pure mathematics researched?
+Answer: yes
+
+Question: Who is the president of the USA?
+Answer: no
+
+Question: How a bill gets introduced to the U.S. Congress Just curious about this.?
+Answer: Yes
+
+Question: I remember learning about an ex prisoner who was brought to America to help train the soldiers. But the details escape me. Can anyone provide details to who he was?
+Answer: Yes
+
+### Input:
+Question: {}
+
+### Output:
+Answer:
+
