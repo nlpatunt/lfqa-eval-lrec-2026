@@ -28,7 +28,7 @@ class LLM_performance_test(object):
         with open(prompt_file_path, 'r', encoding='utf-8') as file:
             LFQA_filter_template = file.read()
 
-        prompt_file_path2 = r'C:\Users\rafid\source\repos\Open_router_api\prompt\few_shot_instructions_batch9.txt'
+        prompt_file_path2 = r'C:\Users\rafid\source\repos\Open_router_api\prompt\few_shot_instructions_batch10.txt'
 
         # Read the JSONL file line by line
         with open(prompt_file_path2, 'r', encoding='utf-8') as file:
@@ -41,8 +41,8 @@ class LLM_performance_test(object):
             remaining = len(df) - i
 
             # Case 1: process 5 at once if 5 or more questions left
-            if remaining >= 9:
-                questions = df['question_text'][i:i+9].tolist()
+            if remaining >= 10:
+                questions = df['question_text'][i:i+10].tolist()
                 prompt = LFQA_filter_template2.format(*questions)
                 response = router.get_response(prompt)
                 print(prompt, "\nresponse:\n", response)
@@ -51,14 +51,14 @@ class LLM_performance_test(object):
                 for line in response.strip().splitlines():
                     line = line.strip().lower()
 
-                    for n in range(1, 10):
-                        if f"{n}$-$" in line and ("yes" in line or "no" in line):
+                    for n in range(1, 11):
+                        if f"{n}" in line and ("yes" in line or "no" in line):
                             answers[n] = 'yes' if 'yes' in line else 'no'
 
-                for offset in range(9):
+                for offset in range(10):
                     new_column_values[i + offset] = answers.get(offset + 1, 'none')
 
-                i += 9
+                i += 10
 
             # Case 2: process one-by-one
             else:
@@ -73,5 +73,5 @@ class LLM_performance_test(object):
                 else:
                     new_column_values[i] = 'none'
                 i += 1
-        df['llama-4-short-14'] = new_column_values
+        df['llama-4-final10x10_5'] = new_column_values
         df.to_excel(input_file, index=False)

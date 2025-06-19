@@ -1,0 +1,86 @@
+### Instruction:
+Decide whether the user’s question qualifies as a Long-Form Question Answering (LFQA) according to the definition.
+
+---
+
+### Output Format:
+Strict response format: You must answer only "yes" or "no". Please do not add any explanation or rationale behind it.
+
+---
+
+### Definition:
+A LFQA must express a single, well-defined information need that requires a detailed, multi-sentence answer involving exposition, explanation, reasoning, exploration, or description of the process. These questions are usually complex or open-ended, often asking “why” or “how” about a process, reason, or concept in an objective manner, which means answers should be grounded in facts, reasoning, or conceptual explanation.
+
+It must not:
+- Combine multiple distinct or loosely related sub-questions  
+- Request personal advice, express individual preferences, seek personal opinions, and recommendations (e.g., product, place, city, food, restaurant, flight, school, course)
+- Be answerable with a single fact, a yes/no response, only code generation, direct formula calculation, or creative content (e.g., poem, joke, story, music, song lyrics, image, or audio) 
+
+---
+
+### Examples:
+
+Question: How do you feel?
+Answer: no
+Rationale: It expects a short, personal response, not an explanation.
+
+Question: How is pure mathematics researched?
+Answer: yes
+Rationale: It requires a detailed explanation of abstract methods, proof techniques, and theoretical exploration—not a short answer.
+
+Question: I have 100$ come up with a specific plan that can help me generate or increase my revenue from 100$ to 1000$ in one month
+Answer: no
+Rationale: It is a personal advice or planning request, not a factual or conceptual question requiring an explanatory long-form answer.
+
+Question: Best documentary about evolution for someone who only learned about creationism in school? I grew up in a fundamentalist cult learning exclusively about creationism. Now that I’m free of that, I want to learn about evolution. Can someone recommend a good documentary that is suitable for someone with NO background knowledge of the subject, that’s not necessarily directed at kids? Thanks in advance! 
+Answer: no
+Rationale: Request for recommendations, not a question requiring a conceptual or explanatory long-form answer.
+
+Question: Is it true that chameleons change color primarily to blend in with their surroundings?
+Answer: yes
+Rationale: It requires more than a yes/no—explaining the biological reasons for color change demands a multi-sentence explanation.
+
+---
+
+### Input Questions 1:
+{}
+**According to the LFQA definition & instruction, judge this question and answer yes or no.**  
+### Input Questions 2:
+{}
+**According to the LFQA definition & instruction, judge this question and answer yes or no.**  
+### Input Questions 3:
+{}
+**According to the LFQA definition & instruction, judge this question and answer yes or no.**  
+### Input Questions 4:
+{}
+**According to the LFQA definition & instruction, judge this question and answer yes or no.**  
+### Input Questions 5:
+{}
+**According to the LFQA definition & instruction, judge this question and answer yes or no.**  
+### Input Questions 6:
+{}
+**According to the LFQA definition & instruction, judge this question and answer yes or no.**  
+### Input Questions 7:
+{}
+**According to the LFQA definition & instruction, judge this question and answer yes or no.**  
+### Input Questions 8:
+{}
+**According to the LFQA definition & instruction, judge this question and answer yes or no.**  
+### Input Questions 9:
+{}
+**According to the LFQA definition & instruction, judge this question and answer yes or no.**  
+### Input Questions 10:
+{}
+**According to the LFQA definition & instruction, judge this question and answer yes or no.**  
+---
+### Output:
+1.
+2.
+3.
+4.
+5.
+6.
+7.
+8.
+9.
+10.
