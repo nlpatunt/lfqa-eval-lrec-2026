@@ -1,6 +1,4 @@
 data/
 .env
 .vs/
-.__pycache__/
-.vscode/
-*.code-workspace
+__pycache__/
