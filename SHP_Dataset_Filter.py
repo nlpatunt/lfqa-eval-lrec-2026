@@ -2,6 +2,8 @@ from OpenRouter import OpenRouter
 import json
 import os
 import pandas as pd
+from jinja2 import Template
+import traceback
 class SHP_Dataset_Filter:
     
     def is_LFQA(self,router,prompt):
@@ -74,6 +76,7 @@ class SHP_Dataset_Filter:
     def filter_data_unique(self,router):
         input_file = r"F:\PhD\Long form research question\SHP-2\reddit\askcarguys\merge_unique.json"
         output_file = r"F:\PhD\Long form research question\SHP-2\reddit\askcarguys\merge_unique_lfqa.json"
+        output_file_label_log = r"F:\PhD\Long form research question\SHP-2\reddit\askcarguys\merge_unique_lfqa_label_log.json"
 
         prompt_file_path = r'C:\Users\rafid\source\repos\Open_router_api\prompt\few_shot_instructions_short.txt'
         
@@ -88,75 +91,107 @@ class SHP_Dataset_Filter:
         with open(prompt_file_path, 'r', encoding='utf-8') as file:
             LFQA_filter_template = file.read()
 
-        prompt_file_path2 = r'C:\Users\rafid\source\repos\Open_router_api\prompt\few_shot_instructions_batch10.txt'
+        prompt_file_path2 = r'C:\Users\rafid\source\repos\Open_router_api\prompt\few_shot_instructions_batch.txt'
 
         # Read the JSONL file line by line
         with open(prompt_file_path2, 'r', encoding='utf-8') as file:
             LFQA_filter_template_batch = file.read()
 
+
+        
+        template = Template(LFQA_filter_template_batch)
+
         #Load existing filtered data
         data_lfqa = []
         log_zero_counter = 0
+        data_lfqa_label_log = []
     
 
-        i=0
-        while(i <  len(data)):
-            remaining = len(data) - i
-            print(remaining)
+        
 
-            if remaining >= 10:
-                questions = [item['history'] for item in data[i:i+10]]
-                data_batch = data[i:i+10]
-                prompt = LFQA_filter_template_batch.format(*questions)
-                response,content_logprobs = router.get_response_logprob(prompt)
-                print(prompt, "\nresponse:\n", response)
-                log_prob_tuple = self.log_prob_extractor(content_logprobs)
-                answers = {}
-                for line in response.strip().splitlines():
-                    line = line.strip().lower()
+        i=0
+        batch_size = 10
+        try:
+            while(i <  len(data)-1301):
+                remaining = len(data) - i
+                print(remaining)
+
+                if remaining >= batch_size:
+                    questions = [item['history'] for item in data[i:i+batch_size]]
+                    prompt = template.render(questions=list(enumerate(questions, start=1)))
+                    data_batch = data[i:i+10]
+                    response,content_logprobs = router.get_response_logprob(prompt)
+                    print(prompt, "\nresponse:\n", response)
+                    log_prob_tuple = self.log_prob_extractor(content_logprobs)
+                    answers = {}
+                    for line in response.strip().splitlines():
+                        line = line.strip().lower()
                     
 
-                    for n in range(1, 11):
-                        if f"{n}." in line and ("yes" in line or "no" in line):
-                            print(f"Line: {line}, n: {n}")
-                            if 'yes' in line:
-                                answers[n]= 'yes'
-                            else:
-                                answers[n]= 'no'
+                        for n in range(1, batch_size+1):
+                            if f"{n}." in line and ("yes" in line or "no" in line):
+                                print(f"Line: {line}, n: {n}")
+                                if 'yes' in line:
+                                    answers[n]= 'yes'
+                                else:
+                                    answers[n]= 'no'
 
-                print(answers)
-                for offset in range(10):
+                    print(answers)
+                    for offset in range(batch_size):
 
-                    if (offset <= len(log_prob_tuple)):
-                        token, log_prob = log_prob_tuple[offset]
-                        print(token,log_prob)
+                        if (offset <= len(log_prob_tuple)):
+                            token, log_prob = log_prob_tuple[offset]
+                            print(token,log_prob)
 
-                        if (log_prob == 0 and (answers.get(offset + 1) == 'yes')):
-                            data_lfqa.append(data_batch[offset])
-                            log_zero_counter +=1
-                        elif(log_prob == 0 and (answers.get(offset + 1) == 'no')):
-                            log_zero_counter += 1
+                            if (log_prob == 0 and (answers.get(offset + 1) == 'yes')):
+                                data_lfqa.append(data_batch[offset])
+                                log_zero_counter +=1
+                            elif(log_prob == 0 and (answers.get(offset + 1) == 'no')):
+                                log_zero_counter += 1
+                            #Saving label log score
+                            item_temp = data_batch[offset].copy()  # Avoid modifying original dataset
+                            item_temp["label"] = answers.get(offset + 1)
+                            item_temp["logscore"] = log_prob
+                            data_lfqa_label_log.append(item_temp)
                         #else:
  
 
-                i += 10
+                    i += batch_size
 
             # Case 2: process one-by-one
-            else:
-                prompt = LFQA_filter_template.format(data[i]['history'])
-                response,content_logprobs = router.get_response_logprob(prompt)
-                print(prompt,"response:\n",response)
-                print(self.log_prob_extractor(content_logprobs))
-                token, log_prob = self.log_prob_extractor(content_logprobs)[0]
-                print(token, log_prob)
+                else:
+                    prompt = LFQA_filter_template.format(data[i]['history'])
+                    response,content_logprobs = router.get_response_logprob(prompt)
+                    print(prompt,"response:\n",response)
+                    print(self.log_prob_extractor(content_logprobs))
+                    token, log_prob = self.log_prob_extractor(content_logprobs)[0]
+                    print(token, log_prob)
    
-                if ('yes' in response.lower()):
-                    data_lfqa.append(data[i])
-                i += 1
+                    if ('yes' in response.lower()) and log_prob == 0:
+                        data_lfqa.append(data[i])
+                    i += 1
+
+                    #Saving label log score
+                    item_temp = data_batch[offset].copy()  # Avoid modifying original dataset
+                    item_temp["label"] = token
+                    item_temp["logscore"] = log_prob
+                    data_lfqa_label_log.append(item_temp)
             
 
+        except KeyboardInterrupt:
+            print("\nInterrupted by user. Saving progress...")
 
-        print("New lfqa data inserted: ",len(data_lfqa))
-        print("Log_zero",log_zero_counter)
-        with open(output_file, "w", encoding="utf-8") as outfile:
-            json.dump(data_lfqa, outfile, indent=2)
+        except Exception as e:
+            print("\nUnexpected error occurred:", e)
+            traceback.print_exc()
+
+        finally:
+            print("New lfqa data inserted: ",len(data_lfqa))
+            print("New lfqa data with label log inserted: ",len(data_lfqa_label_log))
+            print("Log_zero",log_zero_counter)
+            with open(output_file, "w", encoding="utf-8") as outfile:
+                json.dump(data_lfqa, outfile, indent=2)
+
+
+            with open(output_file_label_log, "w", encoding="utf-8") as outfile:
+                json.dump(data_lfqa_label_log, outfile, indent=2)

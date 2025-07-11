@@ -55,13 +55,14 @@ class LLM_performance_test(object):
         
 
         i = 0
+        batch_size = 50
 
         while i < len(df):
             remaining = len(df) - i
 
             # Case 1: process 5 at once if 5 or more questions left
-            if remaining >= 10:
-                questions = df['question_text'][i:i+10].tolist()
+            if remaining >= batch_size+100:
+                questions = df['question_text'][i:i+batch_size].tolist()
                 #prompt = LFQA_filter_template2.format(*questions)
                 prompt = template.render(questions=list(enumerate(questions, start=1)))
                 response,content_logprobs = router.get_response_logprob(prompt)
@@ -71,11 +72,11 @@ class LLM_performance_test(object):
                 for line in response.strip().splitlines():
                     line = line.strip().lower()
 
-                    for n in range(1, 11):
+                    for n in range(1, batch_size+1):
                         if f"{n}." in line and ("yes" in line or "no" in line):
                             answers[n] = 'yes' if 'yes' in line else 'no'
 
-                for offset in range(10):
+                for offset in range(batch_size):
 
                     if (offset <= len(log_prob_tuple)):
                         token, log_prob = log_prob_tuple[offset]
@@ -87,13 +88,13 @@ class LLM_performance_test(object):
                             new_column_values[i + offset] = 'none'  # fill missing values
                             
 
-                i += 10
+                i += batch_size
 
             # Case 2: process one-by-one
             else:
                 prompt = LFQA_filter_template.format(df['question_text'][i])
                 response,content_logprobs = router.get_response_logprob(prompt)
-                print(prompt,"response:\n",response)
+                print(prompt,"single response:\n",response)
                 print(self.log_prob_extractor(content_logprobs))
                 token, log_prob = self.log_prob_extractor(content_logprobs)[0]
                 print(token, log_prob)
@@ -105,5 +106,5 @@ class LLM_performance_test(object):
                 else:
                     new_column_values[i] = 'none'
                 i += 1
-        df['llama-batch10-log'] = new_column_values
+        df['llama-single-data-log'] = new_column_values
         df.to_excel(input_file, index=False)
