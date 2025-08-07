@@ -71,8 +71,25 @@ class OpenRouter:
                 },
             ],
             "provider": {
-                "sort": "throughput"
+                "sort": "throughput",
+                #'ignore': [
+                    #'baseten',
+                    #'fireworks',
+                    #'lambda',
+                    #'deepinfra',
+                    #'gmicloud',
+                    #'parasail',
+                    #'together',
+                    #'google vertex',
+                    #'novita',
+                    #'friendli'
+
+                #],
+                #'order': [
+                    #'cerebras',
+                #]
             },
+           
             "logprobs": True,
             "top_logprobs": 1,
         }
@@ -112,7 +129,8 @@ class OpenRouter:
             "model": self.model_name,
             "messages": prompts,
             "provider": {
-                "sort": "throughput"
+                #"sort": "throughput"
+                "only": ["Cerebras"]
             },
             "logprobs": True,
             "top_logprobs": 5,

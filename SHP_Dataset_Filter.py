@@ -1,5 +1,6 @@
 from OpenRouter import OpenRouter
 import json
+import time
 import os
 import pandas as pd
 from jinja2 import Template
@@ -14,8 +15,8 @@ class SHP_Dataset_Filter:
             return False
 
     def filter_data(self,router):
-        input_file = r"F:\PhD\Long form research question\SHP-2\reddit\askcarguys\merge_unique.json"
-        output_file = r"F:\PhD\Long form research question\SHP-2\reddit\askcarguys\merge_unique_lfqa.json"
+        input_file = r"F:\PhD\Long form research question\SHP-2\stackexchange\askcarguys\merge_unique.json"
+        output_file = r"F:\PhD\Long form research question\SHP-2\stackexchange\askcarguys\merge_unique_lfqa.json"
 
         prompt_file_path = r'C:\Users\rafid\source\repos\Open_router_api\prompt\few_shot_instructions_batch10.txt'
         
@@ -74,9 +75,9 @@ class SHP_Dataset_Filter:
         return yes_no_logprobs
 
     def filter_data_unique(self,router):
-        input_file = r"F:\PhD\Long form research question\SHP-2\reddit\askcarguys\merge_unique.json"
-        output_file = r"F:\PhD\Long form research question\SHP-2\reddit\askcarguys\merge_unique_lfqa.json"
-        output_file_label_log = r"F:\PhD\Long form research question\SHP-2\reddit\askcarguys\merge_unique_lfqa_label_log.json"
+        input_file = r"F:\PhD\Long form research question\SHP-2\stackexchange\stack_stackoverflow\merge_unique.json"
+        output_file = r"F:\PhD\Long form research question\SHP-2\stackexchange\stack_stackoverflow\merge_unique_lfqa.json"
+        output_file_label_log = r"F:\PhD\Long form research question\SHP-2\stackexchange\stack_stackoverflow\merge_unique_lfqa_label_log.json"
 
         prompt_file_path = r'C:\Users\rafid\source\repos\Open_router_api\prompt\few_shot_instructions_short.txt'
         
@@ -105,23 +106,33 @@ class SHP_Dataset_Filter:
         data_lfqa = []
         log_zero_counter = 0
         data_lfqa_label_log = []
-    
+
+        # Load data_lfqa if file exists
+        if os.path.exists(output_file):
+           with open(output_file, 'r', encoding='utf-8') as f:
+                data_lfqa = json.load(f)
+
+        # Load data_lfqa_label_log if file exists
+        if os.path.exists(output_file_label_log):
+            with open(output_file_label_log, 'r', encoding='utf-8') as f:
+                data_lfqa_label_log = json.load(f)
 
         
 
-        i=0
+        i=70900
         batch_size = 10
         try:
-            while(i <  len(data)-1301):
+            while(i <  len(data)):
+                time.sleep(0.02)
                 remaining = len(data) - i
-                print(remaining)
+                print(remaining, i)
 
                 if remaining >= batch_size:
                     questions = [item['history'] for item in data[i:i+batch_size]]
                     prompt = template.render(questions=list(enumerate(questions, start=1)))
                     data_batch = data[i:i+10]
                     response,content_logprobs = router.get_response_logprob(prompt)
-                    print(prompt, "\nresponse:\n", response)
+                    
                     log_prob_tuple = self.log_prob_extractor(content_logprobs)
                     answers = {}
                     for line in response.strip().splitlines():
@@ -130,18 +141,18 @@ class SHP_Dataset_Filter:
 
                         for n in range(1, batch_size+1):
                             if f"{n}." in line and ("yes" in line or "no" in line):
-                                print(f"Line: {line}, n: {n}")
+                                
                                 if 'yes' in line:
                                     answers[n]= 'yes'
                                 else:
                                     answers[n]= 'no'
 
-                    print(answers)
+                    
                     for offset in range(batch_size):
 
                         if (offset <= len(log_prob_tuple)):
                             token, log_prob = log_prob_tuple[offset]
-                            print(token,log_prob)
+                            
 
                             if (log_prob == 0 and (answers.get(offset + 1) == 'yes')):
                                 data_lfqa.append(data_batch[offset])
@@ -162,20 +173,19 @@ class SHP_Dataset_Filter:
                 else:
                     prompt = LFQA_filter_template.format(data[i]['history'])
                     response,content_logprobs = router.get_response_logprob(prompt)
-                    print(prompt,"response:\n",response)
-                    print(self.log_prob_extractor(content_logprobs))
+                   
                     token, log_prob = self.log_prob_extractor(content_logprobs)[0]
-                    print(token, log_prob)
    
                     if ('yes' in response.lower()) and log_prob == 0:
                         data_lfqa.append(data[i])
-                    i += 1
+                    
 
                     #Saving label log score
-                    item_temp = data_batch[offset].copy()  # Avoid modifying original dataset
+                    item_temp = data[i].copy()  # Avoid modifying original dataset
                     item_temp["label"] = token
                     item_temp["logscore"] = log_prob
                     data_lfqa_label_log.append(item_temp)
+                    i += 1
             
 
         except KeyboardInterrupt:

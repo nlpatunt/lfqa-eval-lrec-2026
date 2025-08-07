@@ -26,14 +26,18 @@ class Main:
         )
         #arena_filter = Chatbot_Arena_Filter()
         #arena_filter.filter_data(router)
-        sHP_Dataset_Filter = SHP_Dataset_Filter()
-        sHP_Dataset_Filter.filter_data_unique(router)
+
         #lLM_performance_test = LLM_performance_test()
         #lLM_performance_test.update_response_llm(router)
 
-        #sHP_Dataset_Format= SHP_Dataset_Format()
-        #sHP_Dataset_Format.format_data()
+        sHP_Dataset_Format= SHP_Dataset_Format()
         #sHP_Dataset_Format.filter_unique_post_ids() 
+
+        sHP_Dataset_Filter = SHP_Dataset_Filter()
+        sHP_Dataset_Filter.filter_data_unique(router)
+
+        sHP_Dataset_Format.map_unique_lfqa_to_all_lfqa()
+        sHP_Dataset_Format.shp_final_json_format()
 
 if __name__ == "__main__":
     app = Main()
