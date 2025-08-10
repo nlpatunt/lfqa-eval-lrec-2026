@@ -33,11 +33,15 @@ class Main:
         sHP_Dataset_Format= SHP_Dataset_Format()
         #sHP_Dataset_Format.filter_unique_post_ids() 
 
-        sHP_Dataset_Filter = SHP_Dataset_Filter()
-        sHP_Dataset_Filter.filter_data_unique(router)
+        #sHP_Dataset_Filter = SHP_Dataset_Filter()
+        #sHP_Dataset_Filter.filter_data_unique(router)
 
-        sHP_Dataset_Format.map_unique_lfqa_to_all_lfqa()
-        sHP_Dataset_Format.shp_final_json_format()
+        #sHP_Dataset_Format.map_unique_lfqa_to_all_lfqa()
+        #sHP_Dataset_Format.shp_final_json_format()
+
+        #ChatArena_LFQA_Eval
+        #sHP_Dataset_Format.merge_lfqa_json()
+        sHP_Dataset_Format.update_question_ids()
 
 if __name__ == "__main__":
     app = Main()

@@ -85,9 +85,10 @@ class OpenRouter:
                     #'friendli'
 
                 #],
-                #'order': [
-                    #'cerebras',
-                #]
+                'order': [
+                    'cerebras',
+                    'lambda',
+                ]
             },
            
             "logprobs": True,
@@ -101,6 +102,7 @@ class OpenRouter:
             data=json.dumps(payload)
         )
         response_json = response.json()
+    
         content_logprobs = response_json['choices'][0]['logprobs']['content']
 
 
