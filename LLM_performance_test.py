@@ -1,6 +1,9 @@
 import pandas as pd
 from jinja2 import Template
 from OpenRouter import OpenRouter
+
+import numpy as np
+
 class LLM_performance_test(object):
     def __init__(self):
         # Initialize any variables or settings
@@ -108,3 +111,66 @@ class LLM_performance_test(object):
                 i += 1
         df['llama-single-data-log'] = new_column_values
         df.to_excel(input_file, index=False)
+
+
+    def calculate_match_percentages(self):
+        file_path = r"F:\PhD\Long form research question\Preprocessing data\Post Data Verification\Follow 100 sample\evaluator responses\lfqa_dataset_post_veri_5_external_judgement_majority_vote.xlsx"
+        df = pd.read_excel(file_path, sheet_name="Sheet1")
+        annotators = [col for col in df.columns if col not in ["question_text", "majority_vote"]]
+        results = {}
+    
+        for annotator in annotators:
+            matches = (df[annotator] == df["majority_vote"]).sum()
+            total = len(df)
+            print(f"{annotator} matches: {matches}, total: {total}")
+            results[annotator] = round((matches / total) * 100, 2)
+    
+       
+        percentages = results
+
+        # Print results
+        for annotator, pct in percentages.items():
+            print(f"{annotator}: {pct}%")
+
+        avg_percentage = round(sum(results.values()) / len(results), 2)
+        print("Average: ", avg_percentage)
+
+
+
+
+
+    def gwet_ac1(self):
+
+        file_path = r"F:\PhD\Long form research question\Preprocessing data\Post Data Verification\Follow 100 sample\evaluator responses\lfqa_dataset_post_veri_5_external_judgement_majority_vote.xlsx"
+        df = pd.read_excel(file_path, sheet_name="Sheet1")
+
+        annotator_cols = [c for c in df.columns if c not in ["question_text", "majority_vote"]]
+        #result = gwet_ac1(df[annotator_cols])
+
+
+        df = pd.DataFrame(df[annotator_cols])
+        n_items, n_raters = df.shape
+        n_total = n_items * n_raters
+
+        # Overall category proportions across all raters/items
+        all_labels = pd.Series(df.values.ravel())
+        p = all_labels.value_counts(normalize=True)
+        m_bar = n_raters  # since each item has all raters in your case
+
+        # Correct AC1 expected agreement
+        Pe = (1.0 / (m_bar - 1.0)) * (1.0 - (p ** 2).sum())
+
+        # Observed agreement Po
+        pairwise_agreements = []
+        for _, row in df.iterrows():
+            counts = row.value_counts()
+            num = (counts * (counts - 1)).sum()
+            den = n_raters * (n_raters - 1)
+            pairwise_agreements.append(num / den)
+
+        Po = float(np.mean(pairwise_agreements))
+
+        # AC1
+        AC1 = (Po - Pe) / (1 - Pe) if Pe != 1 else np.nan
+
+        print('Po:', Po, 'Pe:', Pe, 'AC1:', AC1, 'n_items:', n_items, 'n_ratings_total:', n_total)
