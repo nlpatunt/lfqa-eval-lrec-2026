@@ -27,10 +27,12 @@ class Main:
         #arena_filter = Chatbot_Arena_Filter()
         #arena_filter.filter_data(router)
 
-        #lLM_performance_test = LLM_performance_test()
+        lLM_performance_test = LLM_performance_test()
         #lLM_performance_test.update_response_llm(router)
+        lLM_performance_test.calculate_match_percentages()
+        lLM_performance_test.gwet_ac1()
 
-        sHP_Dataset_Format= SHP_Dataset_Format()
+        #sHP_Dataset_Format= SHP_Dataset_Format()
         #sHP_Dataset_Format.filter_unique_post_ids() 
 
         #sHP_Dataset_Filter = SHP_Dataset_Filter()
@@ -41,7 +43,7 @@ class Main:
 
         #ChatArena_LFQA_Eval
         #sHP_Dataset_Format.merge_lfqa_json()
-        sHP_Dataset_Format.update_question_ids()
+        #sHP_Dataset_Format.update_question_ids()
 
 if __name__ == "__main__":
     app = Main()
