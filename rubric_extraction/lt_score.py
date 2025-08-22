@@ -48,7 +48,7 @@ class LanguageToolScorer:
         return round(max(0.0, self.base_score - penalty), 2)
 
 # Example
-if __name__ == "__main__":
-    scorer = LanguageToolScorer()
-    txt = "NLP can refer to Natural Language Processing, an AI field where computers understand and generate human language, or Neuro-Linguistic Programming, a method for personal development and communication. "
-    print("Score:", scorer.score(txt))
+#if __name__ == "__main__":
+    #scorer = LanguageToolScorer()
+    #txt = "NLP can refer to Natural Language Processing, an AI field where computers understand and generate human language, or Neuro-Linguistic Programming, a method for personal development and communication. "
+    #rint("Score:", scorer.score(txt))
