@@ -1,6 +1,6 @@
 import language_tool_python as lt
 
-class LanguageToolScorer:
+class Grammar_score:
     def __init__(
         self,
         lang: str = "en-US", # Setting language to US English
@@ -49,6 +49,6 @@ class LanguageToolScorer:
 
 # Example
 #if __name__ == "__main__":
-    #scorer = LanguageToolScorer()
+    #scorer = Grammar_score()
     #txt = "NLP can refer to Natural Language Processing, an AI field where computers understand and generate human language, or Neuro-Linguistic Programming, a method for personal development and communication. "
     #rint("Score:", scorer.score(txt))
