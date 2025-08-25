@@ -1,6 +1,6 @@
 import pandas as pd
 from jinja2 import Template
-from OpenRouter import OpenRouter
+from config.OpenRouter import OpenRouter
 
 import numpy as np
 

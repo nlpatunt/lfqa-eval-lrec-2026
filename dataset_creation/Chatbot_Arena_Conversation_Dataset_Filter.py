@@ -1,4 +1,4 @@
-from OpenRouter import OpenRouter
+from config.OpenRouter import OpenRouter
 import json
 import os
 import pandas as pd
