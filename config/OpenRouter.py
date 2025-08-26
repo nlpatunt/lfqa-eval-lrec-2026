@@ -196,7 +196,7 @@ class OpenRouter:
             "logprobs": True,
             "top_logprobs": 20,          # need probability mass over {1..5}
             "stop": ["\n", "\r"],       # ensure first token is the digit on its own line
-            # Avoid sampling side-effects:
+            # Avoid sampling side-effects: biases
             "frequency_penalty": 0,
             "presence_penalty": 0,
         }

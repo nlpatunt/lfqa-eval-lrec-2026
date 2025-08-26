@@ -8,10 +8,12 @@ from dotenv import load_dotenv
 import os
 
 
+from rubric_extraction import Relevance_score
 import rubric_extraction.Coherence_score
 
 from dataset_creation.SHP_Dataset_Filter import SHP_Dataset_Filter
 from dataset_creation.SHP_Dataset_format import SHP_Dataset_Format
+import rubric_extraction.Relevance_score
 
 class Main:
     def __init__(self):
@@ -50,9 +52,9 @@ class Main:
         #sHP_Dataset_Format.update_question_ids()
 
 
-        Coherence_score = rubric_extraction.Coherence_score.Coherence_score()
+        Relevance_score = rubric_extraction.Relevance_score.Relevance_score()
 
-        Coherence_score.update_response_llm(router)
+        Relevance_score.update_response_llm(router)
 
 if __name__ == "__main__":
     app = Main()
