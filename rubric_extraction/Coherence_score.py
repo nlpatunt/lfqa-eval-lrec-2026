@@ -1,6 +1,6 @@
 ﻿
 from config.OpenRouter import OpenRouter
-
+import math
 class Coherence_score(object):
 
     def log_prob_extractor_1to5(self, content_logprobs):
@@ -8,13 +8,44 @@ class Coherence_score(object):
         digit_set = {"1", "2", "3", "4", "5"}
         digit_logprobs = []
 
-        for t in content_logprobs or []:
-            tok = t.get("token", "").lstrip("Ġ \n\r\t")  # strip common prefixes
+        if not content_logprobs:
+            return digit_logprobs
+
+        # take the first position's top_logprobs
+        first_pos = content_logprobs[0].get("top_logprobs", [])
+        for t in first_pos:
+            tok = t.get("token", "").lstrip("Ġ \n\r\t")
             if tok in digit_set:
                 digit_logprobs.append((int(tok), t.get("logprob")))
 
         return digit_logprobs
 
+    def prob_weighted_score(self,logprobs):
+        """
+            G-Eval scoring function:
+
+            score = Σ_i [ p(s_i) * s_i ]
+            where
+                p(s_i) = exp(ℓ(s_i)) / Σ_j exp(ℓ(s_j))
+
+            - ℓ(s_i) = log probability of rating token s_i
+            - s_i ∈ {1,2,3,4,5}
+
+            This normalizes the log-probabilities into a distribution
+            over the 5 possible scores, then computes the expected value.
+        """
+        probs = [(score, math.exp(lp)) for score, lp in logprobs] # Convert logprobs -> probs
+
+        Z = sum(p for _, p in probs)  # normalization
+
+        probs = [(s, p / Z) for s, p in probs]
+
+        # GEVAL: Weighted sum
+        score = sum(s * p for s, p in probs)
+
+        return score, probs
+
+        
     def update_response_llm(self,router):
 
         prompt_file_path = r'C:\Users\rafid\Source\Repos\lfqa-eval\prompt\geval_coherence_instructions.txt'
@@ -30,5 +61,10 @@ class Coherence_score(object):
       
         
         response,content_logprobs = router.get_response_geval_logprob(prompt)
-        print(self.log_prob_extractor_1to5(content_logprobs))
+
+
+
+        final_score, normalized_probs = self.prob_weighted_score(self.log_prob_extractor_1to5(content_logprobs))
+        print(final_score)
+        print(normalized_probs)
    

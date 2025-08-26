@@ -201,7 +201,7 @@ class OpenRouter:
             "presence_penalty": 0,
         }
         
-        print(payload)
+        
         response = requests.post(
             url=self.api_url,
             headers=headers,
