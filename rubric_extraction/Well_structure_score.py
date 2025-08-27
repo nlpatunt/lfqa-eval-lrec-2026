@@ -1,7 +1,10 @@
 ﻿
 from config.OpenRouter import OpenRouter
 import math
-class Coherence_score(object):
+
+
+#Calculate Coherence (cohesion)
+class Well_structure_score(object):
 
     def log_prob_extractor_1to5(self, content_logprobs):
 

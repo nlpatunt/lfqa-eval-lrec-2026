@@ -9,7 +9,8 @@ import os
 
 
 from rubric_extraction import Relevance_score
-import rubric_extraction.Coherence_score
+import rubric_extraction.Easy_to_understand_score
+import rubric_extraction.Well_structure_score
 
 from dataset_creation.SHP_Dataset_Filter import SHP_Dataset_Filter
 from dataset_creation.SHP_Dataset_format import SHP_Dataset_Format
@@ -52,9 +53,13 @@ class Main:
         #sHP_Dataset_Format.update_question_ids()
 
 
-        Relevance_score = rubric_extraction.Relevance_score.Relevance_score()
+        #Well_structure_score = rubric_extraction.Well_structure_score.Well_structure_score()
 
-        Relevance_score.update_response_llm(router)
+        #Well_structure_score.update_response_llm(router)
+
+        Easy_to_understand_score = rubric_extraction.Easy_to_understand_score.Easy_to_understand_score()
+
+        Easy_to_understand_score.calculate_score_fluency_textstat(router)
 
 if __name__ == "__main__":
     app = Main()
