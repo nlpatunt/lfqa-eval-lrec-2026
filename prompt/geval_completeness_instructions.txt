@@ -1,0 +1,26 @@
+You will be given a question. You will then be given one answer written for this question.
+
+Your task is to rate the answer on one metric.
+
+Please make sure you read and understand these instructions carefully. Please keep this document open while reviewing, and refer to it as needed.
+
+Evaluation Criteria:
+
+Completeness (1-5) - the degree to which the answer is a comprehensive encapsulation of the relevant information required by the question.
+A complete answer addresses all parts of the question thoroughly, accurately captures the main points, and does not omit crucial elements.
+
+Evaluation Steps:
+
+1. Read the question carefully and identify the main aspects that must be covered for a complete response.
+2. Read the answer and compare it to the question. Check if the answer addresses all essential aspects, main ideas, and pertinent details required by the question.
+3. Assign a score for completeness based on the Evaluation Criteria.
+
+Example:
+
+Question:
+{}
+
+Answer:
+{}
+
+Completeness Evaluation Form (return numeric scores ONLY):

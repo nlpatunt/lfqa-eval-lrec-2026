@@ -9,6 +9,7 @@ import os
 
 
 from rubric_extraction import Relevance_score
+import rubric_extraction.Completeness_score
 import rubric_extraction.Easy_to_understand_score
 import rubric_extraction.Well_structure_score
 
@@ -57,9 +58,14 @@ class Main:
 
         #Well_structure_score.update_response_llm(router)
 
-        Easy_to_understand_score = rubric_extraction.Easy_to_understand_score.Easy_to_understand_score()
+        #Easy_to_understand_score = rubric_extraction.Easy_to_understand_score.Easy_to_understand_score()
 
-        Easy_to_understand_score.calculate_score_fluency_textstat(router)
+        #Easy_to_understand_score.calculate_score_fluency_textstat(router)
+
+
+        Completeness_score = rubric_extraction.Completeness_score.Completeness_score()
+
+        Completeness_score.test_performance_geval_yescieval(router)
 
 if __name__ == "__main__":
     app = Main()
