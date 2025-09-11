@@ -8,14 +8,16 @@ from dotenv import load_dotenv
 import os
 
 
-from rubric_extraction import Relevance_score
 import rubric_extraction.Completeness_score
 import rubric_extraction.Easy_to_understand_score
+import rubric_extraction.Specificity_score
 import rubric_extraction.Well_structure_score
 
 from dataset_creation.SHP_Dataset_Filter import SHP_Dataset_Filter
 from dataset_creation.SHP_Dataset_format import SHP_Dataset_Format
-import rubric_extraction.Relevance_score
+import rubric_extraction.Specificity_score
+
+
 
 class Main:
     def __init__(self):
@@ -63,9 +65,24 @@ class Main:
         #Easy_to_understand_score.calculate_score_fluency_textstat(router)
 
 
-        Completeness_score = rubric_extraction.Completeness_score.Completeness_score()
+        #Completeness_score = rubric_extraction.Completeness_score.Completeness_score()
 
-        Completeness_score.test_performance_geval_yescieval(router)
+        #Completeness_score.test_performance_geval_yescieval(router)
+
+
+        specificity_score = rubric_extraction.Specificity_score.Specificity_score()
+        q = "Why did engagement drop last month?"
+        a = (
+        "My name is rafid. I studied at UNT.whatever happend is happend"
+        )
+        print(specificity_score.score(question=q, answer=a))
+
+
+        
+
+        
+
+        
 
 if __name__ == "__main__":
     app = Main()
