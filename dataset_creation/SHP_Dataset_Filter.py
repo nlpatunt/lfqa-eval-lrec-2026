@@ -15,8 +15,8 @@ class SHP_Dataset_Filter:
             return False
 
     def filter_data(self,router):
-        input_file = r"F:\PhD\Long form research question\SHP-2\stackexchange\askcarguys\merge_unique.json"
-        output_file = r"F:\PhD\Long form research question\SHP-2\stackexchange\askcarguys\merge_unique_lfqa.json"
+        input_file = r"F:\PhD\Long form research question\SHP-2\reddit\askvet\merge_unique.json"
+        output_file = r"F:\PhD\Long form research question\SHP-2\reddit\askvet\merge_unique_lfqa.json"
 
         prompt_file_path = r'C:\Users\rafid\source\repos\Open_router_api\prompt\few_shot_instructions_batch10.txt'
         
@@ -76,9 +76,9 @@ class SHP_Dataset_Filter:
         return yes_no_logprobs
 
     def filter_data_unique(self,router):
-        input_file = r"F:\PhD\Long form research question\SHP-2\stackexchange\stack_workplace\merge_unique.json"
-        output_file = r"F:\PhD\Long form research question\SHP-2\stackexchange\stack_workplace\merge_unique_lfqa.json"
-        output_file_label_log = r"F:\PhD\Long form research question\SHP-2\stackexchange\stack_workplace\merge_unique_lfqa_label_log.json"
+        input_file = r"F:\PhD\Long form research question\SHP-2\reddit\askvet\merge_unique.json"
+        output_file = r"F:\PhD\Long form research question\SHP-2\reddit\askvet\merge_unique_lfqa.json"
+        output_file_label_log = r"F:\PhD\Long form research question\SHP-2\reddit\askvet\merge_unique_lfqa_label_log.json"
 
         prompt_file_path = r'C:\Users\rafid\Source\Repos\lfqa-eval\prompt\few_shot_instructions.txt'
         

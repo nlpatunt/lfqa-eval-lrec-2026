@@ -1,0 +1,20 @@
+### Instruction:
+Decide whether the answer contains an example in response to the given question.
+
+---
+
+### Output Format:
+Strict response format: You must answer only "yes" or "no". Please do not add any explanation or rationale behind it.
+
+---
+
+### Definition:
+An answer is considered to contain an example if it provides a specific instance, illustration, case, or scenario that clarifies or supports the explanation in relation to the question.
+---
+
+### Input:
+Question: {}
+Answer: {}
+
+### Output:
+

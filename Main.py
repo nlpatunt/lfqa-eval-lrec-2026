@@ -11,6 +11,7 @@ import os
 import rubric_extraction.Completeness_score
 import rubric_extraction.Easy_to_understand_score
 import rubric_extraction.Specificity_score
+import rubric_extraction.Example_score
 import rubric_extraction.Well_structure_score
 
 from dataset_creation.SHP_Dataset_Filter import SHP_Dataset_Filter
@@ -30,7 +31,7 @@ class Main:
         
 
         router = OpenRouter(
-            model_name="openai/chatgpt-4o-latest",  # Replace with the model
+            model_name="google/gemini-2.5-flash-lite",  # Replace with the model
             key=api_key
             
         )
@@ -53,6 +54,7 @@ class Main:
 
         #ChatArena_LFQA_Eval
         #sHP_Dataset_Format.merge_lfqa_json()
+        #sHP_Dataset_Format.merge_json_files()
         #sHP_Dataset_Format.update_question_ids()
 
 
@@ -70,12 +72,15 @@ class Main:
         #Completeness_score.test_performance_geval_yescieval(router)
 
 
-        specificity_score = rubric_extraction.Specificity_score.Specificity_score()
-        q = "Why did engagement drop last month?"
-        a = (
-        "My name is rafid. I studied at UNT.whatever happend is happend"
-        )
-        print(specificity_score.score(question=q, answer=a))
+        #specificity_score = rubric_extraction.Specificity_score.Specificity_score()
+        #q = "Why did engagement drop last month?"
+        #a = (
+        #"My name is rafid. I studied at UNT.whatever happend is happend"
+        #)
+        #print(specificity_score.score(question=q, answer=a))
+
+        #example_score = rubric_extraction.Example_score.Example_score() 
+        #example_score.count_and_balance()
 
 
         

@@ -1,12 +1,12 @@
-import json
+﻿import json
 import os
 class SHP_Dataset_Format:
 
 
     def shp_final_json_format(self):
         
-        input_path = r"F:\PhD\Long form research question\SHP-2\stackexchange\stack_workplace\merge_lfqa.json" 
-        output_path = r"F:\PhD\Long form research question\SHP-2\stackexchange\stack_workplace\merge_lfqa_formatted.json" 
+        input_path = r"F:\PhD\Long form research question\SHP-2\reddit\askvet\merge_lfqa.json" 
+        output_path = r"F:\PhD\Long form research question\SHP-2\reddit\askvet\merge_lfqa_formatted.json" 
 
         # Load original dataset
         with open(input_path, 'r', encoding='utf-8') as f:
@@ -22,10 +22,10 @@ class SHP_Dataset_Format:
                 "answer_2": item["human_ref_B"].strip(),
                 "human_judgment": "answer_1" if item["labels"] == 1 else "answer_2",
                 "human_expert": False,
-                "domain": "stack_workplace",
+                "domain": "askvet",
                 "language": None,
                 "turn": None,
-                "source": "shp-2-stackexchange"
+                "source": "shp-2-reddit"
             }
             converted_data.append(new_item)
 
@@ -41,8 +41,8 @@ class SHP_Dataset_Format:
         unique_entries = []
 
 
-        input_path =r"F:\PhD\Long form research question\SHP-2\stackexchange\stack_workplace\merge.json"
-        output_path= r"F:\PhD\Long form research question\SHP-2\stackexchange\stack_workplace\merge_unique.json" 
+        input_path =r"F:\PhD\Long form research question\SHP-2\reddit\askvet\merge.json"
+        output_path= r"F:\PhD\Long form research question\SHP-2\reddit\askvet\merge_unique.json" 
 
         with open(input_path, 'r', encoding='utf-8') as infile:
             for line in infile:
@@ -61,9 +61,9 @@ class SHP_Dataset_Format:
     def map_unique_lfqa_to_all_lfqa(self):
 
 
-        input_path_all =r"F:\PhD\Long form research question\SHP-2\stackexchange\stack_workplace\merge.json"
-        input_path_unique_lfqa =r"F:\PhD\Long form research question\SHP-2\stackexchange\stack_workplace\merge_unique_lfqa.json"
-        output_path= r"F:\PhD\Long form research question\SHP-2\stackexchange\stack_workplace\merge_lfqa.json" 
+        input_path_all =r"F:\PhD\Long form research question\SHP-2\reddit\askvet\merge.json"
+        input_path_unique_lfqa =r"F:\PhD\Long form research question\SHP-2\reddit\askvet\merge_unique_lfqa.json"
+        output_path= r"F:\PhD\Long form research question\SHP-2\reddit\askvet\merge_lfqa.json" 
 
 
 
@@ -115,6 +115,65 @@ class SHP_Dataset_Format:
             json.dump(merged_data, f, ensure_ascii=False, indent=2)
 
         print(f"Merged {len(merged_data)} objects into {output_file}","\n", i)
+
+
+
+    def find_chatarena_lfqa_eval(self):
+        
+        # Everything hard-coded inside the function
+        input_file = r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1"                # Input JSON file
+        output_file = r"F:\PhD\Long form research question\Final Dataset\chatarena_lfqa_eval"   # Output JSON file
+        cutoff_qid = "q26032"                        # Cutoff question_id
+
+        # Helper function scoped inside
+        def qid_to_int(qid: str) -> int:
+            qid = str(qid).strip().lower()
+            if qid.startswith('q'):
+                qid = qid[1:]
+            try:
+                return int(qid)
+            except ValueError:
+                return -1
+
+        cutoff_num = qid_to_int(cutoff_qid)
+
+        # Load → Filter → Save
+        with open(input_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        filtered = [row for row in data if qid_to_int(row.get("question_id", "")) <= cutoff_num]
+
+        with open(output_file, "w", encoding="utf-8") as f:
+            json.dump(filtered, f, ensure_ascii=False, indent=2)
+
+        print(f"Filtered {len(filtered)} items saved to {output_file}")
+
+    def merge_json_files(self):
+        # Hard-coded file names
+        input_files = [
+            r"F:\PhD\Long form research question\Final Dataset\chatarena_lfqa_eval",
+            r"F:\PhD\Long form research question\SHP-2 - Merging\reddit\lfqa_pairwise_human_judgments_v1",
+            r"F:\PhD\Long form research question\SHP-2 - Merging\stackexchange\lfqa_pairwise_human_judgments_v1"
+        ]
+        output_file = r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1"
+
+        merged_data = []
+
+        # Read and combine
+        for file in input_files:
+            with open(file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                if isinstance(data, list):
+                    merged_data.extend(data)
+                else:
+                    print(f"Warning: {file} does not contain a list, skipping...")
+
+        # Save merged result
+        with open(output_file, "w", encoding="utf-8") as f:
+            json.dump(merged_data, f, ensure_ascii=False, indent=2)
+
+        print(f"Merged {len(merged_data)} items from {len(input_files)} files into {output_file}")
+
 
 
     def update_question_ids(self):
