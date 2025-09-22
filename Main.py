@@ -72,15 +72,16 @@ class Main:
         #Completeness_score.test_performance_geval_yescieval(router)
 
 
-        #specificity_score = rubric_extraction.Specificity_score.Specificity_score()
-        #q = "Why did engagement drop last month?"
-        #a = (
-        #"My name is rafid. I studied at UNT.whatever happend is happend"
-        #)
-        #print(specificity_score.score(question=q, answer=a))
-
         #example_score = rubric_extraction.Example_score.Example_score() 
         #example_score.count_and_balance()
+
+
+        specificity_score = rubric_extraction.Specificity_score.Specificity_score()
+        q = "Why did engagement drop last month?"
+        a = (
+        "My name is rafid. I studied at UNT.whatever happend is happend"
+        )
+        print(specificity_score.score(question=q, answer=a))
 
 
         

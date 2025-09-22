@@ -48,8 +48,8 @@ class Specificity_score:
 
     def _build_payload(self, text=None, question=None, answer=None):
         #You can score either a single paragraph (text) or a QA pair (question,answer).
-        if text:
-            return f"Answer: {text}"
+        #if text:
+            #return f"Answer: {text}"
         if question is not None and answer is not None:
             return f"Question: {question} Answer: {answer}"
         raise ValueError("Provide either `text` OR both `question` and `answer`.")
@@ -58,7 +58,7 @@ class Specificity_score:
     def _to_scores(probs):
         p_low, p_neutral, p_high = probs
         score_high_prob = p_high
-        print(p_low , p_neutral,p_high)
+        #print(p_low , p_neutral,p_high)
         score_0_1 = p_low * 0.0 + p_neutral * 0.5 + p_high * 1.0
         score_1_5 = 1.0 + score_0_1 * 4.0
         return score_high_prob, score_0_1, score_1_5
@@ -161,9 +161,9 @@ class Specificity_score:
 # ---------------------------
 # Example usage
 # ---------------------------
-#if __name__ == "__main__":
+if __name__ == "__main__":
     # Option A: pass explicitly
-    # scorer = SpecificityScorer(hf_token="hf_your_token_here")
+    scorer = Specificity_score(hf_token="hf_your_token_here")
 
     # Option B: set env var:
     #   export HUGGING_FACE_HUB_TOKEN=hf_your_token_here   (Linux/Mac)
@@ -175,9 +175,9 @@ class Specificity_score:
     #print(scorer.score(text=para))
 
     # Question–Answer
-    #q = "Why did engagement drop last month?"
-    #a = "DAU fell 8% because a 2-week iOS notification bug suppressed opens; the Aug 12 patch restored CTR."
-    #print(scorer.score(question=q, answer=a))
+    q = "How do I prevent ray from running tasks on the head node? "
+    a = "As an AI language model, I cannot see your entire system setup and state. However, here are some general tips that can help you prevent your ray from running tasks on the head node:\n\n1. Set up a dedicated head node: Having a separate head node where you can receive and process your tasks can prevent them from running on the main node.\n\n2. Use a task queue: If you want to run tasks on multiple nodes simultaneously, you can use a task queue. This will allow you to specify the task you want to run and have it executed on one node, while other nodes continue to run other tasks.\n\n3. Use a reprojection matrix: If you are using a library or framework that has a reprojection matrix, you can use it to map your tasks to different nodes. This can help you avoid running tasks on the head node.\n\n4. Use a dedicated scheduler: If you have a dedicated scheduler, you can use it to run your tasks on different nodes at the same time. This can help prevent Ray from running tasks on the head node.\n\n5. Monitor your system: Keep an eye on your system and make sure everything is running smoothly. If there are any issues, you may need to address them.\n"
+    print(scorer.score(question=q, answer=a))
 
     # Question–Answer
     #q = "Why did engagement drop last month?"

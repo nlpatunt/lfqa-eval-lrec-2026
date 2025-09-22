@@ -87,8 +87,28 @@ def analyze_data(json_path: str):
         "domain_names_per_source": domain_list_per_source,
     }
 
+def count_human_expert_answers(file_path):
+    with open(file_path, "r", encoding="utf-8") as f:
+        data = json.load(f)   # assuming file is a JSON array, not JSONL
 
+    valid = {"answer_1", "answer_2", "tie"}
+    counts = Counter(obj.get("human_judgment") for obj in data)
+
+    # Count only the expected ones
+    total_valid = sum(counts[val] for val in valid if val in counts)
+    print(f"Total objects with human_judgment in {valid}: {total_valid}")
+
+    # Print unexpected values if any
+    unexpected = {k: v for k, v in counts.items() if k not in valid}
+    if unexpected:
+        print("\nUnexpected human_judgment values found:")
+        for k, v in unexpected.items():
+            print(f" - {k!r}: {v} occurrences")
+
+    return total_valid
 # ---------- Example usage ----------
 if __name__ == "__main__":
-    result = analyze_data(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__sample_10010")
-    print("\nSummary dict:", result)
+    #result = analyze_data(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__sample_10010")
+    #print("\nSummary dict:", result)
+
+    count_human_expert_answers(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1")

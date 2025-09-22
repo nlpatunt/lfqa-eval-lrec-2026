@@ -70,7 +70,8 @@ class Completeness_score(object):
 
 
         final_score, normalized_probs = self.prob_weighted_score(self.log_prob_extractor_1to5(content_logprobs))
-        return final_score,self.extract_integers(response), round(final_score)
+        #return final_score,self.extract_integers(response), round(final_score)
+        return final_score
         #print(normalized_probs)
    
     def extract_integers(self, text: str) -> int:

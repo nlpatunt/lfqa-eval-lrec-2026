@@ -3,6 +3,7 @@ from pathlib import Path
 import random
 from collections import defaultdict
 from collections import Counter
+import json, re, html
 class HumanFilter:
 
     def append_chatarena_samples():
@@ -299,10 +300,140 @@ class HumanFilter:
         print(f"[OK] Loaded: {len(records):,} records")
         print(f"[OK] Kept (human judgment true): {len(filtered):,}")
         print(f"[OK] Saved to: {output_path}")
+    @classmethod
+    def find_duplicates_in_chatbot_arena(cls):
+        # Path to JSON file
+        json_file = r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__sample_10010"
+
+        # Load JSON
+        with open(json_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        # Filter only Chatbot Arena records
+        arena_records = [item for item in data if item.get("source") == "Chatbot Arena"]
+
+        # Extract normalized question_text
+        questions = [item.get("question_text", "").strip().lower() for item in arena_records]
+
+        # Count occurrences
+        counts = Counter(questions)
+
+        # Find duplicates
+        duplicates = {q: c for q, c in counts.items() if c > 1}
+
+        if duplicates:
+            print("Duplicated questions in Chatbot Arena:")
+            for q, c in duplicates.items():
+                print(f"- {q} (appears {c} times)")
+            
+            print("\nSummary:")
+            print(f"Unique duplicated questions: {len(duplicates)}")
+            print(f"Total duplicate entries: {sum(c for c in duplicates.values())}")
+        else:
+            print("No duplicates found in Chatbot Arena.")
+
+    @classmethod
+    def duplicate_answer_finder(cls):
+        export_path = r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__sample_10010_duplicate_answers"
+        json_path = r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__sample_10010"
+       
+        preview_chars = 120
+        show_examples = 10
+        data = None
+        # Load
+        if data is None:
+            if not json_path:
+                raise ValueError("Provide either `json_path` or `data`.")
+            with open(json_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+
+        # Collect answers per qid (normalize inline)
+        answers_per_qid = defaultdict(list)  # qid -> list of (norm, raw, rec_idx, field)
+        for idx, rec in enumerate(data):
+            qid = rec.get("question_id")
+            if not qid:
+                continue
+            for k, v in rec.items():
+                if isinstance(k, str) and k.lower().startswith("answer") and isinstance(v, str) and v.strip():
+                    s = html.unescape(v)
+                    s = re.sub(r"<[^>]+>", " ", s)      # strip HTML tags if any
+                    s = re.sub(r"\s+", " ", s).strip().lower()
+                    if s:
+                        answers_per_qid[qid].append((s, v, idx, k))
+
+        # Find duplicates within each qid
+        overlaps_within = {}  # qid -> {norm_answer: [(idx,fld,raw), ...]} where count > 1
+        for qid, items in answers_per_qid.items():
+            bucket = defaultdict(list)
+            for norm, raw, ridx, fld in items:
+                bucket[norm].append((ridx, fld, raw))
+            dup_only = {a: lst for a, lst in bucket.items() if len(lst) > 1}
+            if dup_only:
+                overlaps_within[qid] = dup_only
+
+        # Report
+        print("=== Intra-question_id Overlap Report ===")
+        print(f"Total records: {len(data)}")
+        print(f"Question IDs with any answers: {len(answers_per_qid)}")
+        print(f"Question IDs with duplicate/overlapping answers: {len(overlaps_within)}\n")
+        if not overlaps_within:
+            print("No within-qid answer overlaps found.")
+        else:
+            for qid, dups in overlaps_within.items():
+                print(f"- question_id={qid}: {len(dups)} duplicated answer(s)")
+                shown = 0
+                for _, occs in dups.items():
+                    preview = re.sub(r"\s+", " ", occs[0][2]).strip()
+                    if len(preview) > preview_chars:
+                        preview = preview[:preview_chars] + "…"
+                    where = ", ".join([f"(rec#{i}, {fld})" for i, fld, _ in occs])
+                    print(f"    · '{preview}' appears {len(occs)} times at {where}")
+                    shown += 1
+                    if shown >= show_examples:
+                        break
+
+        if export_path:
+            with open(export_path, "w", encoding="utf-8") as out:
+                json.dump(overlaps_within, out, ensure_ascii=False, indent=2)
+
+        return overlaps_within
+
+    @classmethod
+    def sample_and_save(cls):
+        # Load dataset
+
+        input_file = r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__sample_10010"
+        with open(input_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        # Randomly sample 100
+        sampled = random.sample(data, 100)
+        output_file = r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__sample_100"
+        # Save as JSONL
+        with open(output_file, "w", encoding="utf-8") as f:
+            for record in sampled:
+                f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+        print(f"Sampled 100 records saved to {output_file}")
+
+
+
+    @classmethod
+    def check_sample_count(cls):
+        # Count lines in sampled JSONL
+        output_file = r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__sample_100"
+        with open(output_file, "r", encoding="utf-8") as f:
+            count = sum(1 for _ in f)
+        print(f"Number of records in {output_file}: {count}")
+
+
+
+
 
 
 def main():
-    HumanFilter.append_repeats_groups_to_target_2485()
+    HumanFilter.sample_and_save()
+    HumanFilter.check_sample_count()
 
 
 if __name__ == "__main__":

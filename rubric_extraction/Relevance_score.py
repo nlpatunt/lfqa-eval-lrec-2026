@@ -46,7 +46,7 @@ class Relevance_score(object):
         return score, probs
 
         
-    def update_response_llm(self,router):
+    def calculate(self,router):
 
         prompt_file_path = r'C:\Users\rafid\Source\Repos\lfqa-eval\prompt\geval_relevance_instructions.txt'
 

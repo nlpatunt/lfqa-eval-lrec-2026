@@ -1,7 +1,12 @@
 ﻿
+import sys
+sys.path.append(r"C:\Users\rafid\Source\Repos\lfqa-eval")
 import math
 import textstat
-
+from config.OpenRouter import OpenRouter
+import json
+from dotenv import load_dotenv 
+import os
 class Easy_to_understand_score(object):
     def log_prob_extractor_1to5(self, content_logprobs):
 
@@ -46,7 +51,7 @@ class Easy_to_understand_score(object):
         return score, probs
 
         
-    def calculate_score_fluency_textstat(self,router):
+    def calculate_score_fluency_textstat(self,router,answer):
 
         prompt_file_path = r'C:\Users\rafid\Source\Repos\lfqa-eval\prompt\geval_fluency_instructions.txt'
 
@@ -55,9 +60,9 @@ class Easy_to_understand_score(object):
             LFQA_filter_template = file.read()
 
 
-        question = "Why do old movies have that signature soft glow around the actors when up close?"
-        answer =  " Several reasons contribute to the soft glow that old movies have around actors. First is that Vaseline or other substances would be rubbed on the lens or an optical flat (clear piece of glass which sits in front of the lens) to give a halation or glowing effect. This was used early on in the film industry because makeup and lighting also played and still do play a crucial role in providing the effect. Second, this technique was used because Hollywood has been erasing flaws on-screen for a long time. Cameramen in the '30s and '40s used this trick to blur the frame and the face, since they did not want actors to look awful in HD. Finally, this \"radiating from within\" look was difficult to achieve before the advent of shimmer dust and illuminating powders, thus the tradition of the soft glow.   "
-        prompt = LFQA_filter_template.format(question,answer)
+        #question = "Why do old movies have that signature soft glow around the actors when up close?"
+        #answer =  " Several reasons contribute to the soft glow that old movies have around actors. First is that Vaseline or other substances would be rubbed on the lens or an optical flat (clear piece of glass which sits in front of the lens) to give a halation or glowing effect. This was used early on in the film industry because makeup and lighting also played and still do play a crucial role in providing the effect. Second, this technique was used because Hollywood has been erasing flaws on-screen for a long time. Cameramen in the '30s and '40s used this trick to blur the frame and the face, since they did not want actors to look awful in HD. Finally, this \"radiating from within\" look was difficult to achieve before the advent of shimmer dust and illuminating powders, thus the tradition of the soft glow.   "
+        prompt = LFQA_filter_template.format(answer)
       
         
         response,content_logprobs = router.get_response_geval_logprob(prompt)
@@ -68,6 +73,7 @@ class Easy_to_understand_score(object):
         print(final_score)
         print(normalized_probs)
         print(self.easy_to_understand_readability(answer))
+        return final_score
    
 
 
@@ -141,3 +147,22 @@ class Easy_to_understand_score(object):
                 }
             }
         }
+
+# Example usage
+if __name__ == "__main__":
+    scorer = Easy_to_understand_score()
+
+
+    load_dotenv(dotenv_path=r"C:\Users\rafid\Source\Repos\lfqa-eval\config\.env")
+    api_key = os.getenv("OPENROUTER_API_KEY")
+        
+
+    router = OpenRouter(
+        model_name="openai/gpt-4.1-mini",  # Replace with the model
+        key=api_key  
+    )
+    txt_good = "This sentence is written correctly and has no grammar mistakes."
+    txt_bad = "This are bad sentence with many error that make no sense."
+
+    print("Good text score:", scorer.calculate_score_fluency_textstat(router, txt_good))  # e.g. 4.8–5.0
+    print("Bad text score:", scorer.calculate_score_fluency_textstat(router, txt_bad))    # e.g. 1.2–1.5
