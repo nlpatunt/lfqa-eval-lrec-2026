@@ -23,6 +23,10 @@ from dataset_creation.SHP_Dataset_format import SHP_Dataset_Format
 import rubric_extraction.Specificity_score
 import rubric_extraction.Grammar_score
 import rubric_extraction.Completeness_score
+import rubric_extraction.Well_structure_score
+import rubric_extraction.Relevance_score
+import rubric_extraction.Conciseness_score
+import rubric_extraction.Example_score
 
 class Rubric_based_evaluation:
     def __init__(self):
@@ -54,6 +58,10 @@ class Rubric_based_evaluation:
         grammar_score = rubric_extraction.Grammar_score.Grammar_score()
         easy_to_understand_score = rubric_extraction.Easy_to_understand_score.Easy_to_understand_score()
         completeness_score = rubric_extraction.Completeness_score.Completeness_score()
+        well_structure_score = rubric_extraction.Well_structure_score.Well_structure_score()
+        relevance_score = rubric_extraction.Relevance_score.Relevance_score()
+        conciseness_score = rubric_extraction.Conciseness_score.Conciseness_score()
+        example_score = rubric_extraction.Example_score.Example_score()
 
         for i in range(len(json_objects)):
             #answer_1_score = (specificity_score.score("",json_objects[i]['question_text'],json_objects[i]['answer_1'])['score_1_5'])
@@ -62,12 +70,19 @@ class Rubric_based_evaluation:
             #answer_2_score = grammar_score.score(json_objects[i]['answer_2'])
             #answer_1_score = easy_to_understand_score.calculate_score_fluency_textstat(router, json_objects[i]['answer_1'])
             #answer_2_score = easy_to_understand_score.calculate_score_fluency_textstat(router, json_objects[i]['answer_2'])
-            answer_1_score = (completeness_score.compute(router,json_objects[i]['question_text'],json_objects[i]['answer_1']))
-            answer_2_score = (completeness_score.compute(router,json_objects[i]['question_text'],json_objects[i]['answer_2']))
-            
+            #answer_1_score = (completeness_score.compute(router,json_objects[i]['question_text'],json_objects[i]['answer_1']))
+            #answer_2_score = (completeness_score.compute(router,json_objects[i]['question_text'],json_objects[i]['answer_2']))
+            #answer_1_score = well_structure_score.compute(router, json_objects[i]['question_text'],json_objects[i]['answer_1'])
+            #answer_2_score = well_structure_score.compute(router, json_objects[i]['question_text'],json_objects[i]['answer_2'])
+            #answer_1_score = relevance_score.compute(router, json_objects[i]['question_text'],json_objects[i]['answer_1'])
+            #answer_2_score = relevance_score.compute(router, json_objects[i]['question_text'],json_objects[i]['answer_2'])
+            #answer_1_score = conciseness_score.score(json_objects[i]['answer_1'])
+            #answer_2_score = conciseness_score.score(json_objects[i]['answer_2'])
+            answer_1_score = (example_score.compute(router,json_objects[i]['question_text'],json_objects[i]['answer_1']))
+            answer_2_score = (example_score.compute(router,json_objects[i]['question_text'],json_objects[i]['answer_2']))
 
-            json_objects[i]["completeness_score_answer_1"] = answer_1_score
-            json_objects[i]["completeness_score_answer_2"] = answer_2_score
+            json_objects[i]["example_score_answer_1"] = answer_1_score
+            json_objects[i]["example_score_answer_2"] = answer_2_score
             print(i)
 
 

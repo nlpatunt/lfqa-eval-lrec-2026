@@ -16,6 +16,23 @@ class Example_score:
             return 1
         else:
             return 0
+    def compute(self, router,question, answer):
+        prompt_file_path = r'C:\Users\rafid\Source\Repos\lfqa-eval\prompt\zero_shot_example_detection.txt'
+
+        # Read the prompt template
+        with open(prompt_file_path, 'r', encoding='utf-8') as file:
+            LFQA_filter_template = file.read()
+
+        template = Template(LFQA_filter_template)
+
+
+        prompt = LFQA_filter_template.format(question,answer)
+        print("Prompt:", prompt)    
+
+        response = router.get_response(prompt)
+        print("Raw LLM Response:", response)  
+        return self.is_example_response(response)
+
 
 
     def llm_response(self, router):

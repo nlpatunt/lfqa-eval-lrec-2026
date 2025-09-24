@@ -1,29 +1,29 @@
-You will be given one summary written for a news article.
+You will be given one answer written for a question.
 
-Your task is to rate the summary on one metric.
+Your task is to rate the answer on one metric.
 
 Please make sure you read and understand these instructions carefully. Please keep this document open while reviewing, and refer to it as needed.
 
 Evaluation Criteria:
 
-Relevance (1-5) - selection of important content from the source. The summary should include only important information from the source document. Annotators were instructed to penalize summaries which contained redundancies and excess information.
+Relevance (1-5) - selection of important content from the question. The answer should include only relevant important information that is related to the question. Annotators were instructed to penalize answers which contained redundancies and excess information.
 
 Evaluation Steps:
 
-1. Read the summary and the source document carefully.
-2. Compare the summary to the source document and identify the main points of the article.
-3. Assess how well the summary covers the main points of the article, and how much irrelevant or redundant information it contains.
+1. Read the answer and the question carefully.
+2. Compare the answer to the question and identify the main points of the question.
+3. Assess how well the answer covers the main points of the question, and how much irrelevant or redundant information it contains.
 4. Assign a relevance score from 1 to 5.
 
 
 Example:
 
 
-Source Text:
+Question:
 
 {}
 
-Summary:
+Answer:
 
 {}
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import spacy
 
-class Conciseness_scorer:
+class Conciseness_score:
     def __init__(self, model: str = "en_core_web_sm"):
         self.nlp = spacy.load(model)
 
@@ -31,7 +31,7 @@ class Conciseness_scorer:
         return self.lexical_density(text)
 
 if __name__ == "__main__":
-    scorer = Conciseness_scorer()
+    scorer = Conciseness_score()
     answer_a = (
         "Honestly I don't get why people keep asking the same question over and over again on this sub. "
         "Like dude just google it or check the docs first, it's literally the first result. "
