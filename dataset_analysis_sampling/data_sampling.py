@@ -5,8 +5,8 @@ from collections import defaultdict
 from collections import Counter
 import json, re, html
 class HumanFilter:
-
-    def append_chatarena_samples():
+    
+    def append_chatarena_samples(self):
 
         # --- file paths (edit if needed) ---
         full_path   = Path(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1")
@@ -29,12 +29,12 @@ class HumanFilter:
             and rec.get("question_id") not in expert_ids
         ]
 
-        if len(candidates) < 705:
+        if len(candidates) < 490:
             raise ValueError(f"Only {len(candidates)} eligible candidates, fewer than 705 requested.")
 
         # --- random sample ---
         random.seed(42)  # reproducible
-        sampled = random.sample(candidates, 705)
+        sampled = random.sample(candidates, 490)
 
         # --- append and save ---
         final = expert_records + sampled
@@ -50,7 +50,7 @@ class HumanFilter:
         print(f"[OK] Saved to: {output_path}")
 
 
-    def append_lfqa_Eval_samples():
+    def append_lfqa_Eval_samples(self):
 
         # --- file paths (edit if needed) ---
         full_path   = Path(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1")
@@ -73,12 +73,12 @@ class HumanFilter:
             and rec.get("question_id") not in expert_ids
         ]
 
-        if len(candidates) < 1240:
+        if len(candidates) < 490:
             raise ValueError(f"Only {len(candidates)} eligible candidates, fewer than 705 requested.")
 
         # --- random sample ---
         random.seed(42)  # reproducible
-        sampled = random.sample(candidates, 1240)
+        sampled = random.sample(candidates, 490)
 
         # --- append and save ---
         final = expert_records + sampled
@@ -93,8 +93,8 @@ class HumanFilter:
         print(f"[OK] Final total: {len(final):,}")
         print(f"[OK] Saved to: {output_path}")
 
-    @classmethod
-    def append_domains_from_reddit_stackexchange(cls):
+    
+    def append_domains_from_reddit_stackexchange(self):
         """
         Inputs:
           - FULL_DATASET_PATH: JSON array with all records
@@ -110,7 +110,7 @@ class HumanFilter:
         FULL_DATASET_PATH   = Path(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1")
         PREV_SAMPLE_PATH    = Path(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__human_expert_chatarena_lfqa_eval")
         OUTPUT_PATH         = Path(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__human_expert_chatarena_lfqa_eval_shp")
-        per_domain_target = 40
+        per_domain_target = 25
         seed = 42
         sources_of_interest = {"shp-2-reddit", "shp-2-stackexchange"}
         random.seed(seed)
@@ -176,8 +176,8 @@ class HumanFilter:
             print(f"[INFO] Domains with < {per_domain_target}: {short}")
         print(f"[OK] New total after append: {len(final)} → {OUTPUT_PATH}")
 
-    @classmethod
-    def append_repeats_groups_to_target_2485(cls):
+    
+    def append_repeats_groups_to_target(self):
         """
         Inputs (set inside the function):
           - full_dataset_path: JSON ARRAY with all records
@@ -200,7 +200,7 @@ class HumanFilter:
         output_path       = Path(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__human_expert_chatarena_lfqa_eval_shp_final")
 
         sources_of_interest = {"shp-2-reddit", "shp-2-stackexchange"}
-        target_count = 2485
+        target_count = 600
         seed = 42
 
         # --- Load inputs ---
@@ -280,25 +280,33 @@ class HumanFilter:
         print(f"[OK] New total: {len(final):,} → {output_path}")
 
     @classmethod
+
     def filter_and_save(cls):
-        input_path = Path(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1")   # <-- change path if needed
-        output_path = Path("F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1_human_expert")
+        input_path = Path(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1")
+        output_path = Path(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1_human_expert")
 
         with open(input_path, "r", encoding="utf-8") as f:
             records = json.load(f)   # expects JSON array
 
-        # Filter
-        filtered = [
-            rec for rec in records
-            if rec.get("source") in {"Chatbot Arena", "lfqa_eval"}
-            and (rec.get("human_expert") is True)
-        ]
+        # dictionary to keep per-source counters
+        counters = defaultdict(int)
+        limited = []
 
+        for rec in records:
+            if rec.get("source") in {"Chatbot Arena", "lfqa_eval"} and rec.get("human_expert") is True:
+                src = rec["source"]
+                if counters[src] < 260:   # only append until 260 reached
+                    limited.append(rec)
+                    counters[src] += 1
+
+        # save
         with open(output_path, "w", encoding="utf-8") as f:
-            json.dump(filtered, f, ensure_ascii=False, indent=2)
+            json.dump(limited, f, ensure_ascii=False, indent=2)
 
         print(f"[OK] Loaded: {len(records):,} records")
-        print(f"[OK] Kept (human judgment true): {len(filtered):,}")
+        print(f"[OK] Kept after filter + per-source limit: {len(limited):,}")
+        for src, cnt in counters.items():
+            print(f"    {src}: {cnt}")
         print(f"[OK] Saved to: {output_path}")
     @classmethod
     def find_duplicates_in_chatbot_arena(cls):
@@ -421,7 +429,7 @@ class HumanFilter:
     @classmethod
     def check_sample_count(cls):
         # Count lines in sampled JSONL
-        output_file = r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__sample_100"
+        output_file = r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__human_expert_chatarena_lfqa_eval_shp_final"
         with open(output_file, "r", encoding="utf-8") as f:
             count = sum(1 for _ in f)
         print(f"Number of records in {output_file}: {count}")
@@ -432,8 +440,8 @@ class HumanFilter:
 
 
 def main():
-    HumanFilter.sample_and_save()
-    HumanFilter.check_sample_count()
+    humanfilter = HumanFilter()
+    humanfilter.check_sample_count()
 
 
 if __name__ == "__main__":

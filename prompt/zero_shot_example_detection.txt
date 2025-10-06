@@ -1,4 +1,4 @@
-### Instruction:
+﻿### Instruction:
 Decide whether the answer contains an example in response to the given question.
 
 ---

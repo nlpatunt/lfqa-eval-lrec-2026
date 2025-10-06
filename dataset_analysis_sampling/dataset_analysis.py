@@ -111,4 +111,4 @@ if __name__ == "__main__":
     #result = analyze_data(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__sample_10010")
     #print("\nSummary dict:", result)
 
-    count_human_expert_answers(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1")
+    count_human_expert_answers(r"F:\PhD\Long form research question\Final Dataset\lfqa_pairwise_human_judgments_v1__human_expert_chatarena_lfqa_eval_shp_final")
