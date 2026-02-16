@@ -1,7 +1,8 @@
 import pandas as pd
 from jinja2 import Template
 from config.OpenRouter import OpenRouter
-
+import pandas as pd
+from sklearn.metrics import precision_score, recall_score, f1_score
 import numpy as np
 
 class LLM_performance_test(object):
@@ -37,17 +38,17 @@ class LLM_performance_test(object):
         return yes_no_logprobs
 
     def update_response_llm(self,router):
-        input_file = r'C:\Users\rafid\source\repos\Open_router_api\data\lfqa_dataset_post_veri_5_external_judgement_majority_vote_llm.xlsx'
+        input_file = r'C:\Users\rafid\Source\Repos\lfqa-eval\lfqa_dataset_post_veri_5_external_judgement_majority_vote.xlsx'
         df = pd.read_excel(input_file)
         new_column_values = [None] * len(df['question_text'])
 
-        prompt_file_path = r'C:\Users\rafid\source\repos\Open_router_api\prompt\few_shot_instructions_short.txt'
+        prompt_file_path = r'C:\Users\rafid\Source\Repos\lfqa-eval\prompt\few_shot_instructions_old_def.txt'
 
         # Read the JSONL file line by line
         with open(prompt_file_path, 'r', encoding='utf-8') as file:
             LFQA_filter_template = file.read()
 
-        prompt_file_path2 = r'C:\Users\rafid\source\repos\Open_router_api\prompt\few_shot_instructions_batch.txt'
+        prompt_file_path2 = r'C:\Users\rafid\Source\Repos\lfqa-eval\prompt\few_shot_instructions_batch.txt'
 
         # Read the JSONL file line by line
         with open(prompt_file_path2, 'r', encoding='utf-8') as file:
@@ -96,25 +97,54 @@ class LLM_performance_test(object):
             # Case 2: process one-by-one
             else:
                 prompt = LFQA_filter_template.format(df['question_text'][i])
-                response,content_logprobs = router.get_response_logprob(prompt)
+                #response,content_logprobs = router.get_response_logprob(prompt)
+                response = router.get_response(prompt)
                 print(prompt,"single response:\n",response)
-                print(self.log_prob_extractor(content_logprobs))
-                token, log_prob = self.log_prob_extractor(content_logprobs)[0]
-                print(token, log_prob)
-   
+                #print(self.log_prob_extractor(content_logprobs))
+                #token, log_prob = self.log_prob_extractor(content_logprobs)[0]
+                #print(token, log_prob)
+                """    
                 if ('yes' in response.lower()) and log_prob==0:
                     new_column_values[i] = 'yes'
                 elif('no' in response.lower())and log_prob==0:
                     new_column_values[i] = 'no'
                 else:
                     new_column_values[i] = 'none'
+                """
+                   
+                if ('yes' in response.lower()):
+                    new_column_values[i] = 'yes'
+                elif('no' in response.lower()):
+                    new_column_values[i] = 'no'
+                else:
+                    new_column_values[i] = 'none'
                 i += 1
-        df['llama-single-data-log'] = new_column_values
+        df['gemini-2.5'] = new_column_values
         df.to_excel(input_file, index=False)
+
+    def evaluate(self):
+        # Load Excel file
+        file_path = r"C:\Users\rafid\Source\Repos\lfqa-eval\lfqa_dataset_post_veri_5_external_judgement_majority_vote.xlsx"
+        models = ["llama-4", "gemini-2.5", "gpt-4o"]
+       # models = ["gemini-2.5"]
+        df = pd.read_excel(file_path)
+        
+        # Calculate majority vote as ground truth
+        ground_truth = df['majority_vote']
+
+        # Compute metrics and print results
+        for model in models:
+            y_true =  ground_truth
+            y_pred = df[model]
+            precision = precision_score(y_true, y_pred, average="macro", zero_division=0)
+            recall = recall_score(y_true, y_pred, average="macro", zero_division=0)
+            f1 = f1_score(y_true, y_pred, average="macro", zero_division=0)
+            print(f"{model}: Precision={precision:.4f}, Recall={recall:.4f}, F1={f1:.4f}")
+
 
 
     def calculate_match_percentages(self):
-        file_path = r"F:\PhD\Long form research question\Preprocessing data\Post Data Verification\Follow 100 sample\evaluator responses\lfqa_dataset_post_veri_5_external_judgement_majority_vote.xlsx"
+        file_path = r"C:\Users\rafid\Source\Repos\lfqa-eval\lfqa_dataset_post_veri_5_external_judgement_majority_vote.xlsx"
         df = pd.read_excel(file_path, sheet_name="Sheet1")
         annotators = [col for col in df.columns if col not in ["question_text", "majority_vote"]]
         results = {}

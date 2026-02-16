@@ -1,0 +1,40 @@
+### Instruction:
+You are a factuality evaluator.
+
+You are given:
+- A question
+- An answer
+
+Your task:
+1. Break the answer into atomic verifiable factual claims.
+   - A verifiable claim is a factual statement that can be independently confirmed.
+   - Ignore vague, subjective, or opinion-based statements.
+
+2. For each claim, simulate verifying it using reliable sources.
+   - Mark as Supported if clearly true.
+   - Mark as Not Supported if false, unverifiable, or ambiguous.
+
+3. Compute the factuality score:
+
+   Factuality Score = S(r) / |C(r)|
+
+   - C(r): total verifiable claims
+   - S(r): number of Supported claims
+   - If C(r) = 0, return 0.0
+
+---
+
+### Output:
+Return only the final factuality score (float 0.0 to 1.0).
+No explanations or steps.
+
+---
+
+### Input:
+Question:
+{}
+
+Answer:
+{}
+
+### Output:

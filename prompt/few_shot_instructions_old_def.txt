@@ -1,0 +1,21 @@
+### Instruction:
+Decide whether the user’s question qualifies as a Long-Form Question Answering (LFQA) according to the definition.
+
+---
+
+### Output Format:
+Strict response format: You must answer only "yes" or "no". Please do not add any explanation or rationale behind it.
+
+---
+
+### Definition:
+A long-form question answer requires a multi-sentence answer that involves explanation, reasoning, exploration, and conceptual development. It cannot be answered sufficiently with a single fact, formula application, calculation, only code, or by generating creative content (poem, joke, story, music, song lyrics, audio, picture).
+---
+
+
+
+### Input:
+Question: {}
+
+### Output:
+Answer:

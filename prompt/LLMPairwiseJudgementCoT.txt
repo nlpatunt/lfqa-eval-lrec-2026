@@ -1,0 +1,36 @@
+﻿### Instruction:
+You are an expert long-form question answering (LFQA) evaluator. Think step-by-step which answer is better,
+but in your final response after the tag '### Output:' output only 'answer_1' or 'answer_2'.
+
+You will be given one question and two candidate answers.
+
+Your task is to choose which answer is better overall.
+
+Return only one token:
+	- answer_1: if Answer 1 is better
+	- answer_2: if Answer 2 is better
+---
+
+### Output Format:
+Strict response format: You must answer only 'answer_1' or 'answer_2'. Please do not add any explanation or rationale behind it.
+---
+
+### Input:
+
+Question:
+
+{}
+
+answer_1:
+
+{}
+
+answer_2:
+
+{}
+
+### Reasoning (in your mind, not shown to user):
+(You may reason internally but do not print it.)
+
+### Output:
+

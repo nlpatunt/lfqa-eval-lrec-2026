@@ -149,7 +149,7 @@ class Rubric_based_evaluation:
         
 
         router = OpenRouter(
-            model_name="openai/chatgpt-4o-latest",  # Replace with the model
+            model_name="openai/gpt-4o",  # Replace with the model
             key=api_key
             
         )
@@ -164,7 +164,7 @@ class Rubric_based_evaluation:
             
         )
 
-        json_objects = self.load_data(r"F:\PhD\Long form research question\Final Dataset\sample - rubric_extraction\lfqa_pairwise_human_judgments_v1_sample_test.jsonl")
+        json_objects = self.load_data(r"F:\PhD\Long form research question\Final Dataset\sample - rubric_extraction\lfqa_pairwise_human_judgments_v1_sample_test_0_temp.jsonl")
         print(len(json_objects))
         specificity_score = rubric_extraction.Specificity_score.Specificity_score()
         grammar_score = rubric_extraction.Grammar_score.Grammar_score()
@@ -176,14 +176,28 @@ class Rubric_based_evaluation:
         example_score = rubric_extraction.Example_score.Example_score()
         factuality_geval_score = rubric_extraction.Factuality_score.Factuality_score()
         lLM_judgement = rubric_extraction.LLM_judgement.LLM_judgement()
-        output_file = r"F:\PhD\Long form research question\Final Dataset\sample - rubric_extraction\lfqa_pairwise_human_judgments_v1_sample_test_0_rubrics.jsonl"
+        output_file = r"F:\PhD\Long form research question\Final Dataset\sample - rubric_extraction\lfqa_pairwise_human_judgments_v1_sample_test_perturbed_textfooler.jsonl"
 
 
+        file_path = r"F:\PhD\Long form research question\Perturbed\lfqa-test-perturbed.jsonl"
+        qid_list = []
+        qid_to_json = {}
+
+        with open(file_path, "r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    obj = json.loads(line)
+                    qid = obj.get("qid")
+                    if qid:
+                        qid_list.append(qid)
+                        qid_to_json[qid] = obj
+
+        print(f"[OK] Loaded {len(qid_list)} records")
         
-        count_diff_answer = 0
+
         i = 0
         while i < len(json_objects):
-        #while i < 2:
+        #while i < 50:
             try:
                 """
                 answer_1_score = (specificity_score.score("",json_objects[i]['question_text'],json_objects[i]['answer_1'])['score_1_5'])
@@ -276,53 +290,51 @@ class Rubric_based_evaluation:
                 
                 lLM_judgement_response = lLM_judgement.judge_rubrics(router_gemini, json_objects[i]['question_text'],json_objects[i]['answer_1'],json_objects[i]['answer_2'])
                 json_objects[i]['lLM_judgement_response_gemini_rubrics'] = lLM_judgement_response
-                
-
-
-                lLM_judgement_response = lLM_judgement.judge_cot(router, json_objects[i]['question_text'],json_objects[i]['answer_1'],json_objects[i]['answer_2'])
-                json_objects[i]['lLM_judgement_response_gpt4o_cot'] = lLM_judgement_response
                 """
-                responses = [
-                    lLM_judgement.judge_rubrics(router, json_objects[i]['question_text'], json_objects[i]['answer_1'], json_objects[i]['answer_2']),
-                    lLM_judgement.judge_rubrics(router, json_objects[i]['question_text'], json_objects[i]['answer_1'], json_objects[i]['answer_2']),
-                    lLM_judgement.judge_rubrics(router, json_objects[i]['question_text'], json_objects[i]['answer_1'], json_objects[i]['answer_2'])
-                ]
+               
+                if json_objects[i]['question_id'] in qid_list:
+                    json_perturbed = qid_to_json.get(json_objects[i]['question_id'])
+                    #lLM_judgement_response = lLM_judgement.judge(router_gemini, json_perturbed['q'],json_perturbed['answer_1'],json_perturbed['answer_2'])
+                    
+                    
+                    responses = [
+                        lLM_judgement.judge(router, json_perturbed['q'],json_perturbed['answer_1'],json_perturbed['answer_2']),
+                        lLM_judgement.judge(router, json_perturbed['q'],json_perturbed['answer_1'],json_perturbed['answer_2']),
+                        lLM_judgement.judge(router, json_perturbed['q'],json_perturbed['answer_1'],json_perturbed['answer_2'])
+                    ]
                 
 
                 
-                cleaned = []
-                for r in responses:
-                    print(r)
-                    if "answer_1" in r.lower():
-                        cleaned.append("answer_1")
+                    cleaned = []
+                    for r in responses:
+                        print(r)
+                        if "answer_1" in r.lower():
+                            cleaned.append("answer_1")
+                        else:
+                            cleaned.append("answer_2")
+
+                    # Check if all same
+                    all_same = (len(set(cleaned)) == 1)
+
+                    if all_same:
+                        print("All responses are the same:", cleaned[0])
                     else:
-                        cleaned.append("answer_2")
+                        count_diff_answer += 1
+                        print("Not all responses are the same")
 
-                # Check if all same
-                all_same = (len(set(cleaned)) == 1)
-
-                if all_same:
-                    print("All responses are the same:", cleaned[0])
-                else:
-                    count_diff_answer += 1
-                    print("Not all responses are the same")
-
-                # Count occurrences
-                answer1_count = responses.count("answer_1")
-                answer2_count = responses.count("answer_2")
-                lLM_judgement_response = ''
-                # Majority decision
-                if answer1_count > answer2_count:
-                    lLM_judgement_response = "answer_1"
-                elif answer2_count > answer1_count:
-                    lLM_judgement_response = "answer_2"
-                print("Majority", lLM_judgement_response)
-                json_objects[i]['lLM_judgement_response_gpt4o_rubrics_intermediate_majority'] = responses
-                json_objects[i]['lLM_judgement_response_gpt40_rubrics_majority'] = lLM_judgement_response
-
-
-
-
+                    # Count occurrences
+                    answer1_count = responses.count("answer_1")
+                    answer2_count = responses.count("answer_2")
+                    lLM_judgement_response = ''
+                    # Majority decision
+                    if answer1_count > answer2_count:
+                        lLM_judgement_response = "answer_1"
+                    elif answer2_count > answer1_count:
+                        lLM_judgement_response = "answer_2"
+                    print("Majority", lLM_judgement_response)
+                    json_objects[i]['lLM_judgement_response_gpt4o_perturbed_intermediate_majority'] = responses
+                    json_objects[i]['lLM_judgement_response_gpt4o_majority'] = lLM_judgement_response
+                    #json_objects[i]['lLM_judgement_response_gpt40_without_tie_purturbed'] = lLM_judgement_response
 
                 i += 1 
                 print(i  )
@@ -348,8 +360,6 @@ class Rubric_based_evaluation:
         print(f"[OK] Updated JSONL saved to {output_file}")
 
         print(f"Updated JSON saved to {output_file}")
-
-        print("count_diff_answer",count_diff_answer)
 
         
 

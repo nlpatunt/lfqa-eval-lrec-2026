@@ -31,16 +31,16 @@ class Main:
         
 
         router = OpenRouter(
-            model_name="google/gemini-2.5-flash-lite",  # Replace with the model
+            model_name="google/gemini-2.5-flash",  # Replace with the model
             key=api_key
             
         )
         #arena_filter = Chatbot_Arena_Filter()
         #arena_filter.filter_data(router)
 
-        #lLM_performance_test = LLM_performance_test()
+        lLM_performance_test = LLM_performance_test()
         #lLM_performance_test.update_response_llm(router)
-        #lLM_performance_test.calculate_match_percentages()
+        lLM_performance_test.evaluate()
         #lLM_performance_test.gwet_ac1()
 
         #sHP_Dataset_Format= SHP_Dataset_Format()
@@ -76,12 +76,12 @@ class Main:
         #example_score.count_and_balance()
 
 
-        specificity_score = rubric_extraction.Specificity_score.Specificity_score()
-        q = "Why did engagement drop last month?"
-        a = (
-        "My name is rafid. I studied at UNT.whatever happend is happend"
-        )
-        print(specificity_score.score(question=q, answer=a))
+        #specificity_score = rubric_extraction.Specificity_score.Specificity_score()
+        #q = "Why did engagement drop last month?"
+        #a = (
+        #"My name is rafid. I studied at UNT.whatever happend is happend"
+        #)
+        #print(specificity_score.score(question=q, answer=a))
 
 
         

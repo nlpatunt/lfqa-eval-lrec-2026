@@ -34,6 +34,7 @@ class OpenRouter:
             "provider": {
                 "sort": "throughput"
             },
+            "temperature": 0,
             "logprobs": True,
             "top_logprobs": 1,
         }
@@ -208,6 +209,7 @@ class OpenRouter:
             data=json.dumps(payload)
         )
         response_json = response.json()
+        print(response_json)
     
         content_logprobs = response_json['choices'][0]['logprobs']['content']
 

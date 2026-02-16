@@ -1,0 +1,35 @@
+You will be given one answer written for a question.
+
+Your task is to rate the answer on one metric.
+
+Please make sure you read and understand these instructions carefully. Please keep this document open while reviewing, and refer to it as needed.
+
+Evaluation Criteria:
+
+Factuality (1-5) -  the degree to which the answer is factually accurate and verifiable. The answer should contain statements that are correct, reliable, 
+and consistent with widely accepted knowledge (as could be confirmed using sources like Wikipedia, textbooks, or Google Search). Annotators were instructed 
+to penalize factual errors, hallucinations, or unverifiable claims.
+
+Evaluation Steps:
+
+1. Read the answer and the question carefully.
+2. Identify the factual claims made in the answer.
+3. Assess whether each claim is accurate and could be verified through common sources.
+4. Assign a factuality score from 1 to 5.
+
+
+Example:
+
+
+Question:
+
+{}
+
+Answer:
+
+{}
+
+
+Evaluation Form (scores ONLY):
+
+- Factuality:

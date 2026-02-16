@@ -100,7 +100,8 @@ class Completeness_score(object):
 
      
     def test_performance_geval_yescieval(self, router):
-        file_path = r"C:\Users\rafid\Downloads\bioasq-dataset\all\original_synthesis\BioASQ_dataset_synthesis_per_model_evaluation_meta-llama-3.1-8b-instruct_clean.xlsx"
+        #file_path = r"C:\Users\rafid\Downloads\bioasq-dataset\all\original_synthesis\BioASQ_dataset_synthesis_per_model_evaluation_meta-llama-3.1-8b-instruct_clean.xlsx"
+        file_path = r"C:\Users\rafid\Downloads\orkg-synthesis-dataset\all\original_synthesis\llm4syn_dataset_synthesis_per_model_evaluation_meta-llama-3.1-8b-instruct_clean.xlsx"
         # Read the Excel file
         df = pd.read_excel(file_path)
 
@@ -122,6 +123,7 @@ class Completeness_score(object):
         print(len(questions))
         match_counter = 0
         for i in range(len(questions)):
+            print(questions[i],answers[i])
             geval_score,response,geval_score_round = self.compute(router,questions[i],answers[i])
             geval_scores.append(geval_score)
             geval_scores_round.append(geval_score_round)
@@ -146,4 +148,3 @@ class Completeness_score(object):
         self.compare_yes_g_in_one_function(list(completeness_scores),geval_raw_scores)
 
 
-    
