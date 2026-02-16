@@ -186,22 +186,6 @@ limitations transparently.
 
 
 
-------------------------------------------------------------------------
-
-# Citation
-
-If you use this repository in academic work, please cite:
-
-@inproceedings{jahan-etal-2026-lfqahp1m,
-  title     = {LFQA-HP-1M: A Large-Scale Human Preference Dataset for Long-Form Question Answering},
-  author    = {Jahan, Rafid Ishrak and Iqbal, Fahmid Shahriar and Ray Choudhury, Sagnik},
-  booktitle = {Proceedings of the 14th International Conference on Language Resources and Evaluation (LREC 2026)},
-  year      = {2026},
-  publisher = {European Language Resources Association (ELRA)},
-  address   = {Marseille, France}
-}
-
-
 
 ------------------------------------------------------------------------
 
@@ -215,3 +199,20 @@ If you use this repository in academic work, please cite:
 
 For questions, issues, or collaboration inquiries, please open an issue
 in this repository.
+
+
+# Citation
+
+If you use LFQA-HP-1M in your research, please cite:
+
+```bibtex
+@inproceedings{jahan-etal-2026-lfqahp1m,
+  title     = {LFQA-HP-1M: A Large-Scale Human Preference Dataset for Long-Form Question Answering},
+  author    = {Jahan, Rafid Ishrak and Iqbal, Fahmid Shahriar and Ray Choudhury, Sagnik},
+  booktitle = {Proceedings of the 14th International Conference on Language Resources and Evaluation (LREC 2026)},
+  year      = {2026},
+  publisher = {European Language Resources Association (ELRA)},
+  address   = {Marseille, France}
+}
+
+
