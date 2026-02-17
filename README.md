@@ -7,7 +7,7 @@ evaluation, fine-grained rubric extraction, and LLM-as-a-Judge
 experimentation.
 
 
-# Paper
+## Paper
 
 📄 LFQA-HP-1M: A Large-Scale Human Preference Dataset for Long-Form Question Answering  
 Proceedings of the 14th International Conference on Language Resources and Evaluation (LREC 2026)
@@ -17,7 +17,7 @@ Paper link:
 
 ---
 
-# Dataset Access
+## Dataset Access
 
 
 The dataset associated with this framework are publicly available on Hugging Face:
@@ -32,7 +32,7 @@ methodology research.
 
 ------------------------------------------------------------------------
 
-# Overview
+## Overview
 
 Long-form question answering requires evaluation beyond simple
 correctness. The repository provides tools to:
@@ -46,7 +46,7 @@ The framework emphasizes modularity, transparency, and reproducibility.
 
 ------------------------------------------------------------------------
 
-# Repository Structure
+## Repository Structure
 
     config/                     Environment configuration files
     dataset_creation/           Pairwise dataset formatting and randomization
@@ -57,7 +57,7 @@ The framework emphasizes modularity, transparency, and reproducibility.
 
 ------------------------------------------------------------------------
 
-# Installation
+## Installation
 
 Clone the repository:
 
@@ -78,7 +78,7 @@ configuration.
 
 ------------------------------------------------------------------------
 
-# Environment Configuration
+## Environment Configuration
 
 Update the `.env` file inside the `config/` directory:
 
@@ -87,7 +87,7 @@ Update the `.env` file inside the `config/` directory:
 
 
 
-# Model selection from Open Router
+## Model selection from Open Router
 
 	Main.py
 
@@ -99,15 +99,15 @@ Update the `.env` file inside the `config/` directory:
 
 ------------------------------------------------------------------------
 
-# Usage
+## Usage
 
-## 1. Dataset Construction
+### 1. Dataset Construction
 
     `dataset_creation/`
 
 The repository contains script files that has been to collect, filtered, and formate for LFQA research.
 
-## 2. Rubric Extraction
+### 2. Rubric Extraction
 
     python rubric_extraction/<script_name>.py
 
@@ -123,21 +123,21 @@ Extracts fine-grained evaluation dimensions including:
 -   Use of Examples
 -   Factuality
 
-## 3. Logistic Regression Model Weights
+### 3. Logistic Regression Model Weights
 
     python rubric_extraction/RegressionPreferenceModel.py
 	
 Contain codes to extract logistic regression model feature weights.
 
 
-## 3. Prompts
+### 3. Prompts
 
     `prompt/`
 
 Contains all Prompts
 
 
-## 3. Evaluation
+### 3. Evaluation
 	python rubric_extraction/LogisticValidate.py
 	
 Rubric based LR model evaluation
@@ -151,7 +151,7 @@ LLM-as-a-judge evaluation
 
 ------------------------------------------------------------------------
 
-# Reproducibility Statement
+## Reproducibility Statement
 
 -   Deterministic randomization supported via fixed seeds\
 -   Modular pipeline design for controlled experimentation\
@@ -162,7 +162,7 @@ configurations when publishing results.
 
 ------------------------------------------------------------------------
 
-# Data Statement
+## Data Statement
 
 This repository provides tooling for dataset construction and
 evaluation. Datasets processed using this framework may contain
@@ -183,7 +183,7 @@ Any dataset created using this pipeline should document:
 
 ------------------------------------------------------------------------
 
-# Ethics and Limitations
+## Ethics and Limitations
 
 The evaluation of long-form responses may reflect biases present in:
 
@@ -203,19 +203,19 @@ limitations transparently.
 
 ------------------------------------------------------------------------
 
-# License
+## License
 
 
 
 ------------------------------------------------------------------------
 
-# Contact
+## Contact
 
 For questions, issues, or collaboration inquiries, please open an issue
 in this repository.
 
 
-# Citation
+## Citation
 
 If you use LFQA-HP-1M in your research, please cite:
 
@@ -228,6 +228,7 @@ If you use LFQA-HP-1M in your research, please cite:
   publisher = {European Language Resources Association (ELRA)},
   address   = {Marseille, France}
 }
+
 
 
 
