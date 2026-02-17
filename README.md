@@ -6,6 +6,20 @@ repository supports human preference modeling, pairwise answer
 evaluation, fine-grained rubric extraction, and LLM-as-a-Judge
 experimentation.
 
+
+# Paper
+
+📄 LFQA-HP-1M: A Large-Scale Human Preference Dataset for Long-Form Question Answering  
+Proceedings of the 14th International Conference on Language Resources and Evaluation (LREC 2026)
+
+Paper link:  
+
+
+---
+
+# Dataset Access
+
+
 The dataset associated with this framework are publicly available on Hugging Face:
 
 LFQA-HP-1M (Full Dataset):
@@ -214,5 +228,6 @@ If you use LFQA-HP-1M in your research, please cite:
   publisher = {European Language Resources Association (ELRA)},
   address   = {Marseille, France}
 }
+
 
 
