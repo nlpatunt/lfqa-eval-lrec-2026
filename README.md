@@ -148,7 +148,14 @@ LLM-as-a-judge evaluation
 
 
 
+------------------------------------------------------------------------
 
+## Adversarial Perturbations Victime Model and Dataset
+
+Model: https://huggingface.co/nlpatunt/modernbert-base-lfqa
+Datasets: 
+https://huggingface.co/datasets/nlpatunt/lfqa-textbugger
+https://huggingface.co/datasets/nlpatunt/lfqa-deepwordbug
 ------------------------------------------------------------------------
 
 ## Reproducibility Statement
@@ -228,6 +235,7 @@ If you use LFQA-HP-1M in your research, please cite:
   publisher = {European Language Resources Association (ELRA)},
   address   = {Marseille, France}
 }
+
 
 
 
